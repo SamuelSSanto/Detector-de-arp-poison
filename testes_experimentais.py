@@ -1,82 +1,16 @@
 #!/usr/bin/env python3
 """
 ================================================================================
- TESTES EXPERIMENTAIS CONSOLIDADOS — Detecção de ARP Poisoning em Redes
+ TESTES EXPERIMENTAIS — Detecção de ARP Poisoning em Redes
  Industriais — TCC — FEMEC/UFU — Samuel Silva dos Santos
 ================================================================================
 
-O QUE MUDOU NESTA VERSÃO (consolidação pedida após o Capítulo 5)
--------------------------------------------------------------------
-Esta versão resolve as quatro limitações apontadas na Seção 5.3 do TCC:
-
-  1. CADA CENÁRIO RODA VÁRIAS VEZES (REPETICOES_POR_CENARIO), com a topologia
-     reconstruída do zero a cada repetição. O resumo final reporta média e
-     desvio padrão por cenário, em vez de um único "sim/não".
-
-  2. CADA RODADA DE ATAQUE É FEITA POR UM HOST ATACANTE DEDICADO DIFERENTE
-     (h8, h10, h11 e h12), em vez de um único host reaproveitado. Isso
-     resolve o efeito em que, antes, o bloqueio da 1ª rodada "neutralizava"
-     as rodadas seguintes sem testar a detecção de fato — agora cada rodada
-     é uma tentativa independente e a taxa de detecção por rodada volta a
-     ser uma métrica válida.
-     (Uma primeira tentativa desta correção usou uma única interface h8
-     trocando de MAC a cada rodada; isso se mostrou problemático em duas
-     frentes — trocar o MAC real de h8 disparava um ARP gratuito do próprio
-     host anunciando sua nova identidade para o seu PRÓPRIO IP, gerando
-     alertas espúrios; e a alternativa com sub-interfaces macvlan não se
-     mostrou confiável sobre os links veth do Mininet, com os quadros nem
-     sempre chegando ao espelhamento. Hosts dedicados de verdade usam o
-     mesmo mecanismo, já validado, de h1-h8.)
-
-  3. AMOSTRAS DE OVERHEAD MAIORES E REPETIDAS: ping de 50 pacotes (era 10) e
-     iperf de 10s (era 5s), cada medição repetida MEDICOES_OVERHEAD vezes e
-     com a média reportada — reduz o ruído que gerava overheads "negativos"
-     sem sentido físico na versão anterior.
-
-  4. TESTE DE HOST GENUINAMENTE NOVO: além do teste de falso positivo com um
-     host já conhecido reincidindo (h3), agora um host adicional (h9) só
-     entra em atividade DEPOIS da fase de aprendizado, simulando um
-     equipamento novo sendo instalado na fábrica.
-
-  5. ESPELHAMENTO TAMBÉM EM s2 E s3 (não só no núcleo s1): rodando com só o
-     espelho de s1, foi descoberto que um ataque entre dois hosts do MESMO
-     switch de acesso (ex.: h1<->h2, ambos em s2) nunca atravessa o núcleo —
-     é um quadro unicast comutado localmente — e por isso NUNCA chegava a
-     ser visto pelo IDS, independente de qualquer bug de código. Isso
-     derrubava a taxa de detecção nos cenários s2 (25%) e s3 (75%), embora
-     a lógica de detecção em si estivesse correta sempre que o pacote
-     chegava até ela. Agora h7 tem uma interface para cada switch (s1, s2 e
-     s3), cada uma alimentada pelo espelhamento LOCAL daquele switch, e uma
-     instância do detector roda em cada uma (aplicando o NAC na própria
-     bridge onde o ataque foi visto). O mesmo problema, por sinal, também
-     afetava silenciosamente o teste de falso positivo (h3 e h1 estão no
-     mesmo switch s2 em TODOS os cenários) — o "0% de falso positivo" das
-     versões anteriores media, sem querer, "0% das vezes que o tráfego
-     chegou a ser visto", nem sempre "0% de verdade". Isso também foi
-     corrigido por tabela.
-
-AVISO DE DURAÇÃO
------------------
-Com REPETICOES_POR_CENARIO=5 (padrão), o tempo total estimado é de
-~60-90 minutos (3 cenários x 5 repetições x ~4-5 min cada, já com os 3
-detectores rodando simultaneamente por execução). Ajuste
-REPETICOES_POR_CENARIO abaixo se quiser um teste mais rápido.
-
 COMO RODAR
 ----------
-  1) Coloque este arquivo NA MESMA PASTA do arp_detector_arrumado.py.
-  2) Ajuste RESULTS_DIR se quiser salvar o .txt na pasta de texto do TCC.
-  3) sudo python3 testes_experimentais.py
-  4) Pode deixar rodando em segundo plano — tudo é salvo incrementalmente
-     em resultados_experimentos.txt conforme cada cenário termina.
-
-REQUISITOS (mesmos de antes)
-------------------------------
-  - mininet, openvswitch-switch
-  - dsniff (arpspoof)                        -> sudo apt install dsniff
-  - iperf                                    -> sudo apt install iperf
-  - scapy, colorama
-================================================================================
+  1) Coloque este arquivo NA MESMA PASTA do arp_detector_arrumado.py (detector).
+  2) sudo python3 testes_experimentais.py
+  3) tudo é salvo em resultados_experimentos.txt conforme cada cenário termina.
+----------
 """
 
 import os
@@ -92,24 +26,21 @@ from mininet.link import TCLink
 from mininet.log import setLogLevel
 
 # ============================================================================
-# CONFIGURAÇÃO — ajuste aqui se precisar
+# CONFIGURAÇÃO — ajuste se precisar trocar o nome do arquivo ou trocar onde sera salvo 
 # ============================================================================
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DETECTOR_PATH = os.path.join(SCRIPT_DIR, "arp_detector_arrumado.py")
 
-# Pasta onde o resultados_experimentos.txt será salvo — ajuste para a pasta
-# de texto/redação do TCC.
 RESULTS_DIR = SCRIPT_DIR
-# RESULTS_DIR = os.path.join(os.path.expanduser("~"), "tcc", "texto")
 
-APRENDIZADO_SEG = 15          # mesmo valor usado no Capítulo 3 (padrão da ferramenta)
+
+APRENDIZADO_SEG = 15          # Tempo de aprendizado da ferramenta
 MARGEM_APRENDIZADO_SEG = 5    # tempo extra de segurança para garantir que o aprendizado terminou
 ATAQUE_DURACAO_SEG = 6        # duração de cada rodada de arpspoof
 PAUSA_ENTRE_RODADAS_SEG = 3   # pausa entre uma rodada de ataque e outra
 
 # Cada rodada de ataque é feita por um HOST ATACANTE DEDICADO diferente
-# (não por rotação de MAC virtual — ver nota no topo do arquivo). Formato:
-# (nome_do_host_atacante, IP_vitima_1, IP_vitima_2)
+
 PARES_ATAQUE = [
     ("h8",  "10.0.0.1", "10.0.0.2"),  # h1 (PLC1) <-> h2 (PLC2), ambos em s2
     ("h10", "10.0.0.4", "10.0.0.5"),  # h4 (Sensor1) <-> h5 (Sensor2), ambos em s3
@@ -121,11 +52,11 @@ RODADAS_FALSO_POSITIVO = 3      # repetições do teste de host reincidente (h3)
 RODADAS_HOST_NOVO = 3            # repetições do teste de host genuinamente novo (h9)
 
 CENARIOS = ["s1", "s2", "s3"]
-REPETICOES_POR_CENARIO = 5   # <<< ajuste aqui para testes mais rápidos/robustos
+REPETICOES_POR_CENARIO = 5   # Possivel ajustar aqui para testes mais rápidos/robustos
 
 # Overhead de rede: amostras maiores e repetidas
-PING_COUNT = 50                  # pacotes ICMP por medição (era 10)
-IPERF_DURACAO = 10               # segundos por medição de banda (era 5)
+PING_COUNT = 50                  # pacotes ICMP por medição 
+IPERF_DURACAO = 10               # segundos por medição de banda 
 MEDICOES_OVERHEAD = 3            # repetições de cada medição, reporta a média
 
 os.makedirs(RESULTS_DIR, exist_ok=True)
@@ -157,14 +88,6 @@ def subsecao(titulo):
     log("-" * 78)
     log(f" {titulo}")
     log("-" * 78)
-
-
-# ============================================================================
-# Nota: rodadas de ataque agora usam hosts atacantes dedicados (h8, h10,
-# h11, h12) — ver PARES_ATAQUE e montar_topologia — em vez de truques de
-# interface virtual, então não há mais geração/rotação de MAC aqui.
-# ============================================================================
-
 
 # ============================================================================
 # FUNÇÕES DE TOPOLOGIA
@@ -204,9 +127,7 @@ def configurar_espelho(bridge, porta_saida, portas_monitorar):
 
 
 def hosts_exceto(net, excluir):
-    """Retorna a lista de hosts do net, exceto os nomes em 'excluir'.
-    Usado para manter h9 fora do warm-up de ARP (ele deve permanecer
-    'desconhecido' até o teste de host novo, de propósito)."""
+
     return [h for h in net.hosts if h.name not in excluir]
 
 
@@ -234,10 +155,7 @@ def montar_topologia(switch_atacante):
     h6 = net.addHost("h6", ip="10.0.0.6/24", mac="00:00:00:00:00:06")
     h7 = net.addHost("h7", ip="10.0.0.7/24", mac="00:00:00:00:00:07")
     h8 = net.addHost("h8", ip="10.0.0.8/24", mac="00:00:00:00:00:08")
-    h9 = net.addHost("h9", ip="10.0.0.9/24", mac="00:00:00:00:00:09")  # "novo" equipamento
-    # h10, h11, h12: atacantes dedicados para as rodadas 2, 3 e 4 (h8 faz a
-    # rodada 1). Todos ligados ao MESMO switch de h8 em cada cenário, para
-    # manter "posição do atacante na topologia" como a única variável.
+    h9 = net.addHost("h9", ip="10.0.0.9/24", mac="00:00:00:00:00:09")
     h10 = net.addHost("h10", ip="10.0.0.10/24", mac="00:00:00:00:00:0a")
     h11 = net.addHost("h11", ip="10.0.0.11/24", mac="00:00:00:00:00:0b")
     h12 = net.addHost("h12", ip="10.0.0.12/24", mac="00:00:00:00:00:0c")
@@ -257,13 +175,7 @@ def montar_topologia(switch_atacante):
     net.addLink(h11, switch_obj, bw=10, delay="2ms", max_queue_size=1000)
     net.addLink(h12, switch_obj, bw=10, delay="2ms", max_queue_size=1000)
 
-    # h7 agora tem UMA INTERFACE PARA CADA SWITCH (h7-eth0->s1, h7-eth1->s2,
-    # h7-eth2->s3), cada uma recebendo o espelhamento LOCAL daquele switch.
-    # Isso resolve uma limitação real identificada nos testes: um ataque
-    # unicast entre dois hosts do MESMO switch de acesso (ex.: h1<->h2, ambos
-    # em s2) nunca atravessa o núcleo s1, então um espelhamento centralizado
-    # em s1 nunca o vê. Com espelho também em s2 e s3, esse tráfego local
-    # passa a ser visível a uma instância do detector rodando naquele switch.
+   
     link_h7_s1 = net.addLink(h7, s1, bw=50, delay="1ms", max_queue_size=1000)
     link_h7_s2 = net.addLink(h7, s2, bw=50, delay="1ms", max_queue_size=1000)
     link_h7_s3 = net.addLink(h7, s3, bw=50, delay="1ms", max_queue_size=1000)
@@ -281,12 +193,7 @@ def montar_topologia(switch_atacante):
         os.system(f"ovs-vsctl clear bridge {sw} mirrors 2>/dev/null")
     time.sleep(1)
 
-    # Configura um espelho em CADA switch (s1, s2 e s3), cada um enviando
-    # para a interface de h7 correspondente. A porta é obtida DIRETAMENTE do
-    # objeto Link retornado por net.addLink (o lado ".intf2" é o conectado ao
-    # switch) — evita depender de heurísticas frágeis como "external_ids"
-    # (nem sempre preenchido pelo Mininet) ou "última porta da lista" (que já
-    # nos deu problema antes, ao adicionar hosts depois de h7).
+   
     ifaces_h7 = {}
     for bridge, link_h7 in [("s1", link_h7_s1), ("s2", link_h7_s2), ("s3", link_h7_s3)]:
         porta_h7 = link_h7.intf2.name
@@ -300,8 +207,7 @@ def montar_topologia(switch_atacante):
         ifaces_h7[bridge] = link_h7.intf1.name  # nome da interface do LADO de h7
     time.sleep(1)
 
-    # Warm-up de ARP em TODOS os hosts, EXCETO h9 — h9 precisa permanecer
-    # "desconhecido" do detector até o teste de host novo (item 4 acima).
+    # Warm-up de ARP em TODOS os hosts, EXCETO h9 — h9 precisa permanecer "desconhecido" do detector até o teste de host novo (item 4 acima).
     log("[TOPO] Testando conectividade inicial (warm-up de ARP, exceto h9)...")
     net.ping(hosts=hosts_exceto(net, ["h9"]))
 
@@ -388,7 +294,7 @@ def _ler_trecho(caminho, pos_inicio=0):
 
 
 # ============================================================================
-# EXECUÇÃO DE UM CENÁRIO (uma repetição)
+# EXECUÇÃO DE UM CENÁRIO 
 # ============================================================================
 def rodar_cenario(switch_atacante, execucao_idx):
     resultado = {
@@ -513,7 +419,6 @@ def rodar_cenario(switch_atacante, execucao_idx):
 
         # ----------------------------------------------------------
         # 6) HOST GENUINAMENTE NOVO — h9 nunca visto pelo detector
-        #    (não participou do warm-up nem do aprendizado)
         # ----------------------------------------------------------
         subsecao(f"[{switch_atacante} #{execucao_idx}] Host genuinamente novo pós-aprendizado (h9)")
         pos_atual = _tamanho_arquivo(log_detector)
@@ -621,7 +526,7 @@ def agregar_por_cenario(resultados):
 # RELATÓRIO FINAL
 # ============================================================================
 def escrever_resumo(resultados):
-    secao("RESUMO FINAL — TABELAS PARA OS CAPÍTULOS 4 e 5 DO TCC")
+    secao("RESUMO FINAL")
 
     agregados = agregar_por_cenario(resultados)
 
@@ -732,7 +637,7 @@ def main():
 
     _log_file_handle = open(RESULTS_TXT, "w", encoding="utf-8")
     log("=" * 78)
-    log(" RESULTADOS DOS TESTES EXPERIMENTAIS (VERSÃO CONSOLIDADA)")
+    log(" RESULTADOS DOS TESTES EXPERIMENTAIS")
     log(" Detecção de ARP Poisoning em Redes Industriais com Python")
     log(f" Gerado em: {datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')}")
     log("=" * 78)
