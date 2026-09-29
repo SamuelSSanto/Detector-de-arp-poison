@@ -1,5 +1,5 @@
 ==============================================================================
- RESULTADOS DOS TESTES EXPERIMENTAIS (VERSÃO CONSOLIDADA)
+ RESULTADOS DOS TESTES EXPERIMENTAIS
  Detecção de ARP Poisoning em Redes Industriais com Python
  Gerado em: 29/08/2026 06:49:56
 ==============================================================================
