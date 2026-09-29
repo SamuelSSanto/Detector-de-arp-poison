@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-Topologia Industrial com Cascateamento de Switches
+Topologia Industrial simulaçao
 TCC — Detecção de ARP Poisoning em Redes Industriais
 FEMEC/UFU — Samuel Silva dos Santos
 
-TOPOLOGIA (versão final, usada na rodada experimental definitiva):
+TOPOLOGIA:
 
                     s1 (Core)
                    /         \\
@@ -23,20 +23,10 @@ TOPOLOGIA (versão final, usada na rodada experimental definitiva):
                      para simular um equipamento instalado depois que o
                      detector já está em operação.
 
-POR QUE ESPELHAR EM s1, s2 E s3 (não só no núcleo)
----------------------------------------------------
-Um ataque de ARP Poisoning entre dois hosts do MESMO switch de acesso
-(ex.: h1 <-> h2, ambos em s2) é comutado localmente e nunca atravessa o
-núcleo s1 — logo, um espelhamento restrito a s1 nunca o vê, independente
-de qualquer lógica de detecção. Por isso cada switch tem seu próprio
-espelho, e h7 escuta os três simultaneamente em um único processo.
-
 COMO RODAR
 ----------
   1) sudo python3 topologia.py [s1|s2|s3]
-     (o argumento escolhe a que switch h8/h10/h11/h12 ficam ligados;
-      padrão: s1)
-
+     
   2) Em outro terminal (xterm h7 a partir do CLI do Mininet), inicie o
      detector escutando as três interfaces de uma vez:
 
@@ -135,13 +125,13 @@ def montar_topologia(atacante_switch="s1"):
 
     net = Mininet(switch=OVSSwitch, link=TCLink, autoSetMacs=True)
 
-    # ── Switches ──────────────────────────────────────────────────────
+    # Switches ──────────────────────────────────────────────────────
     print("*** Criando switches")
     s1 = net.addSwitch("s1", failMode="standalone")  # Core
     s2 = net.addSwitch("s2", failMode="standalone")  # Acesso — PLC/IHM
     s3 = net.addSwitch("s3", failMode="standalone")  # Acesso — Sensores/SCADA
 
-    # ── Hosts ─────────────────────────────────────────────────────────
+    # Hosts ─────────────────────────────────────────────────────────
     print("*** Criando hosts")
     h1 = net.addHost("h1", ip="10.0.0.1/24", mac="00:00:00:00:00:01")    # PLC 1
     h2 = net.addHost("h2", ip="10.0.0.2/24", mac="00:00:00:00:00:02")    # PLC 2
@@ -156,7 +146,7 @@ def montar_topologia(atacante_switch="s1"):
     h11 = net.addHost("h11", ip="10.0.0.11/24", mac="00:00:00:00:00:0b")  # Atacante 3
     h12 = net.addHost("h12", ip="10.0.0.12/24", mac="00:00:00:00:00:0c")  # Atacante 4
 
-    # ── Links ─────────────────────────────────────────────────────────
+    # Links ─────────────────────────────────────────────────────────
     print("*** Criando links com QoS")
 
     # Uplinks do núcleo (100 Mbps)
@@ -193,7 +183,7 @@ def montar_topologia(atacante_switch="s1"):
     # específico de aceitação de host novo.
     net.addLink(h9, s1, bw=10, delay="2ms", max_queue_size=1000)
 
-    # ── Start ─────────────────────────────────────────────────────────
+    # Carregamento da rede ─────────────────────────────────────────────────────────
     print("*** Iniciando rede")
     net.start()
     time.sleep(2)
@@ -203,7 +193,7 @@ def montar_topologia(atacante_switch="s1"):
     for iface in ["s1-eth1", "s1-eth2", "s2-eth1", "s3-eth1"]:
         corrigir_r2q_htb(iface)
 
-    # ── IPv6 off ──────────────────────────────────────────────────────
+    # IPv6 off ──────────────────────────────────────────────────────
     for host in [h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11, h12]:
         host.cmd("sysctl -w net.ipv6.conf.all.disable_ipv6=1 2>/dev/null")
         host.cmd("sysctl -w net.ipv6.conf.default.disable_ipv6=1 2>/dev/null")
@@ -220,10 +210,9 @@ def montar_topologia(atacante_switch="s1"):
         os.system(f"ovs-vsctl clear bridge {sw} mirrors 2>/dev/null")
     time.sleep(1)
 
-    # ── Espelhamento independente em s1, s2 e s3 ─────────────────────
+    # Espelhamento independente em s1, s2 e s3 ─────────────────────
     # A porta de saída de cada mirror é obtida DIRETAMENTE do objeto Link
-    # retornado por net.addLink (o lado ".intf2" é o conectado ao switch) —
-    # evita depender de heurísticas frágeis como "última porta da lista".
+    # retornado por net.addLink (o lado ".intf2" é o conectado ao switch) 
     print("\n*** Configurando espelhamento em s1, s2 e s3")
     ifaces_h7 = {}
     for bridge, link_h7 in [("s1", link_h7_s1), ("s2", link_h7_s2), ("s3", link_h7_s3)]:
@@ -237,15 +226,14 @@ def montar_topologia(atacante_switch="s1"):
         ifaces_h7[bridge] = link_h7.intf1.name  # nome da interface do LADO de h7
     time.sleep(1)
 
-    # ── Teste de conectividade ─────────────────────────────────────────
-    # Warm-up de ARP em todos os hosts, EXCETO h9 — h9 precisa permanecer
-    # "desconhecido" do detector até o teste de host novo.
+    #  Teste de conectividade ─────────────────────────────────────────
+    #  EXCETO h9 — h9 precisa permanecer "desconhecido" do detector até o teste de host novo.
     print("\n*** Testando conectividade inicial (warm-up de ARP, exceto h9)")
     print("    >>> ABRA h7 E INICIE O IDS AGORA <<<\n")
     time.sleep(5)
     net.ping(hosts=hosts_exceto(net, ["h9"]))
 
-    # ── Instruções ────────────────────────────────────────────────────
+    # Instruções para rodar ────────────────────────────────────────────────────
     print("\n" + "=" * 65)
     print(" TOPOLOGIA PRONTA")
     print("=" * 65)
