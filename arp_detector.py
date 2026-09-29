@@ -126,21 +126,19 @@ class ARPDetector:
     def __init__(self, interfaces, auto_bloquear, tempo_aprendizado,
                  safe_macs=None, bridge=None, bridge_por_iface=None, debug=False):
 
-        # Aceita tanto uma lista de interfaces (uso novo: múltiplos switches
-        # espelhados para o mesmo processo) quanto uma string única (uso
-        # original documentado no Capítulo 3 — mantido 100% compatível).
+    
         if isinstance(interfaces, str):
             interfaces = [interfaces]
         self.interfaces        = interfaces
-        self.interface         = interfaces[0]  # mantido para mensagens/compatibilidade
+        self.interface         = interfaces[0]  # mensagens/compatibilidade
         self.auto_bloquear     = auto_bloquear
         self.tempo_aprendizado = tempo_aprendizado
         self.safe_macs         = set(m.lower() for m in (safe_macs or []))
         self.bridge            = bridge
         # Mapa {interface: bridge} usado para decidir, PACOTE A PACOTE, em
-        # qual bridge aplicar o bloqueio — necessário quando o mesmo processo
-        # escuta o espelhamento de MAIS DE UM switch simultaneamente (ver
-        # Seção 5.3): cada interface corresponde ao espelho local de um
+        # qual bridge aplicar o bloqueio. Necessário quando o mesmo processo
+        # escuta o espelhamento de MAIS DE UM switch simultaneamente 
+        # cada interface corresponde ao espelho local de um
         # switch diferente, então o bloqueio precisa ir para a bridge certa,
         # não sempre para a mesma.
         self.bridge_por_iface  = dict(bridge_por_iface or {})
@@ -190,12 +188,6 @@ class ARPDetector:
                 except Exception:
                     pass
 
-    # Encerra a fase de aprendizado por TEMPO REAL (timer), e não por
-    # "próximo pacote que chegar". Corrige o bug em que, se nenhum ARP
-    # novo circula durante a janela de aprendizado (ex: cache já resolvido
-    # por um pingAll anterior), a fase só terminava quando chegava o
-    # PRIMEIRO pacote do ataque — fazendo o próprio ataque virar a
-    # "linha de base confiável".
     def finalizar_aprendizado(self):
         with self._lock:
             if not self.fase_aprendizado:
@@ -305,12 +297,9 @@ class ARPDetector:
                     self.bloquear(src_mac, src_ip, bridge_alvo)
                 return
 
-            # IP nunca visto (nem no aprendizado, nem na detecção até agora).
-            # ANTES: confiava de cara no primeiro pacote — se esse pacote
-            # fosse forjado, o atacante virava a "verdade". AGORA: exige a
-            # mesma confirmação (MIN_APARICOES) usada no aprendizado, e avisa
-            # explicitamente que é um host pós-aprendizado (deve ser raro
-            # numa rede industrial com hosts fixos).
+            "IP nunca visto (nem no aprendizado, nem na detecção até agora) exige a confirmação (MIN_APARICOES) usada no aprendizado, e avisa
+            "explicitamente que é um host pós-aprendizado"
+            
             chave = (src_ip, src_mac)
             self._contagem[chave] += 1
 
