@@ -1,0 +1,209 @@
+==============================================================================
+ RESULTADOS DOS TESTES EXPERIMENTAIS  TESTE RÁPIDO PARA FORMA PASSIVA
+ Detecção de ARP Poisoning em Redes Industriais com Python
+ Gerado em: 14/11/2026 03:44:41
+==============================================================================
+
+Parâmetros usados nesta execução:
+  Tempo de aprendizado........: 15s
+  Repetições por cenário......: 1
+  Rodadas de ataque/execução..: 4 (MAC de atacante diferente a cada rodada)
+  Rodadas de falso positivo...: 3 (host reincidente h3)
+  Rodadas de host novo........: 3 (host inédito h9)
+  Amostras de overhead........: 1x de 50 pacotes / 10s
+  Cenários (posição de h8)....: s1
+  Total de execuções completas: 1
+
+==============================================================================
+ CENÁRIO s1 — EXECUÇÃO 1/1 (geral: 1/1)
+==============================================================================
+[TOPO] Criando rede com atacante (h8) ligado a s1...
+[TOPO] Espelho s1: s1-spn (push VLAN 101) -> s1-rx1 -> s1-eth7
+[TOPO] Espelho s2: s2-spn (push VLAN 102) -> s1-rx2 -> s1-eth7
+[TOPO] Espelho s3: s3-spn (push VLAN 103) -> s1-rx3 -> s1-eth7
+[TOPO] Espelho em s1: saída=s1-spn  monitorando=['s1-eth1', 's1-eth2', 's1-eth3', 's1-eth4', 's1-eth5', 's1-eth6', 's1-eth8']
+[TOPO] Espelho em s2: saída=s2-spn  monitorando=['s2-eth1', 's2-eth2', 's2-eth3', 's2-eth4']
+[TOPO] Espelho em s3: saída=s3-spn  monitorando=['s3-eth1', 's3-eth2', 's3-eth3', 's3-eth4']
+[TOPO] Testando conectividade inicial (warm-up de ARP, exceto h9)...
+
+------------------------------------------------------------------------------
+ [s1 #1] Overhead BASELINE (1x, 50 pacotes, 10s)
+------------------------------------------------------------------------------
+  [baseline] medição 1/1: latência=9.139 ms, banda=9.51 Mbps
+
+------------------------------------------------------------------------------
+ [s1 #1] Iniciando detector único (espelho de s1+s2+s3 via VLAN, aprendizado: 15s)
+------------------------------------------------------------------------------
+
+============================================================
+  ARP IDS — Detector Híbrido de ARP Spoofing
+============================================================
+  Ambiente   : LINUX
+  Interfaces : h7-eth0
+  Mapa VLAN  : {101: 's1', 102: 's2', 103: 's3'}
+  Modo NAC   : PASSIVO (só alertas)
+  Método     : ebtables / arptables
+  Aprendizado: 15s
+  Confirmação: 2 pacotes por IP/MAC
+  Debug      : inativo
+============================================================
+
+[INFO] Fase de aprendizado iniciada (15s)...
+[LEARN?]         10.0.0.1  ->  00:00:00:00:00:01  (aguardando confirmação...)
+[LEARN]          10.0.0.1  ->  00:00:00:00:00:01  ✓
+[LEARN?]         10.0.0.2  ->  00:00:00:00:00:02  (aguardando confirmação...)
+[LEARN?]         10.0.0.3  ->  00:00:00:00:00:03  (aguardando confirmação...)
+[LEARN?]         10.0.0.4  ->  00:00:00:00:00:04  (aguardando confirmação...)
+[LEARN]          10.0.0.4  ->  00:00:00:00:00:04  ✓
+[LEARN?]         10.0.0.5  ->  00:00:00:00:00:05  (aguardando confirmação...)
+[LEARN]          10.0.0.5  ->  00:00:00:00:00:05  ✓
+[LEARN?]         10.0.0.6  ->  00:00:00:00:00:06  (aguardando confirmação...)
+[LEARN]          10.0.0.6  ->  00:00:00:00:00:06  ✓
+[LEARN?]         10.0.0.8  ->  00:00:00:00:00:08  (aguardando confirmação...)
+[LEARN]          10.0.0.8  ->  00:00:00:00:00:08  ✓
+[LEARN?]        10.0.0.10  ->  00:00:00:00:00:0a  (aguardando confirmação...)
+[LEARN]         10.0.0.10  ->  00:00:00:00:00:0a  ✓
+[LEARN?]        10.0.0.11  ->  00:00:00:00:00:0b  (aguardando confirmação...)
+[LEARN]         10.0.0.11  ->  00:00:00:00:00:0b  ✓
+[LEARN?]        10.0.0.12  ->  00:00:00:00:00:0c  (aguardando confirmação...)
+[LEARN]         10.0.0.12  ->  00:00:00:00:00:0c  ✓
+[LEARN]          10.0.0.2  ->  00:00:00:00:00:02  ✓
+[LEARN]          10.0.0.3  ->  00:00:00:00:00:03  ✓
+
+[INFO] Aprendizado concluído. 10 host(s) mapeado(s). Monitorando...
+
+                 10.0.0.1  ->  00:00:00:00:00:01
+                10.0.0.10  ->  00:00:00:00:00:0a
+                10.0.0.11  ->  00:00:00:00:00:0b
+                10.0.0.12  ->  00:00:00:00:00:0c
+                 10.0.0.2  ->  00:00:00:00:00:02
+                 10.0.0.3  ->  00:00:00:00:00:03
+                 10.0.0.4  ->  00:00:00:00:00:04
+                 10.0.0.5  ->  00:00:00:00:00:05
+                 10.0.0.6  ->  00:00:00:00:00:06
+                 10.0.0.8  ->  00:00:00:00:00:08
+
+[INFO] Origem dos ARPs no aprendizado: s1=162 s2=117 s3=117 sem-tag=45
+
+
+
+
+------------------------------------------------------------------------------
+ [s1 #1] Overhead COM detector ativo
+------------------------------------------------------------------------------
+  [com IDS] medição 1/1: latência=9.191 ms, banda=9.49 Mbps
+
+------------------------------------------------------------------------------
+ [s1 #1] Rodadas de ataque (hosts atacantes dedicados por rodada)
+------------------------------------------------------------------------------
+  Rodada 1/4: atacante=h8 (00:00:00:00:00:08)  arpspoof 10.0.0.1 <-> 10.0.0.2
+
+============================================================
+  ALERTA #1 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.2
+  MAC legítimo    : 00:00:00:00:00:02
+  MAC atacante    : 00:00:00:00:00:08  <-- FALSO
+  Bridge alvo     : s1
+  Ambiente        : LINUX
+============================================================
+
+[INFO] Modo passivo — use --nac para bloqueio automático.
+
+  >>> [DETECTADO] Rodada 1: ataque de h8 (00:00:00:00:00:08) foi identificado pelo IDS
+  Rodada 2/4: atacante=h10 (00:00:00:00:00:0a)  arpspoof 10.0.0.4 <-> 10.0.0.5
+
+============================================================
+  ALERTA #2 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.5
+  MAC legítimo    : 00:00:00:00:00:05
+  MAC atacante    : 00:00:00:00:00:0a  <-- FALSO
+  Bridge alvo     : s1
+  Ambiente        : LINUX
+============================================================
+
+[INFO] Modo passivo — use --nac para bloqueio automático.
+
+  >>> [DETECTADO] Rodada 2: ataque de h10 (00:00:00:00:00:0a) foi identificado pelo IDS
+  Rodada 3/4: atacante=h11 (00:00:00:00:00:0b)  arpspoof 10.0.0.3 <-> 10.0.0.6
+
+============================================================
+  ALERTA #3 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0b  <-- FALSO
+  Bridge alvo     : s1
+  Ambiente        : LINUX
+============================================================
+
+[INFO] Modo passivo — use --nac para bloqueio automático.
+
+  >>> [DETECTADO] Rodada 3: ataque de h11 (00:00:00:00:00:0b) foi identificado pelo IDS
+  Rodada 4/4: atacante=h12 (00:00:00:00:00:0c)  arpspoof 10.0.0.1 <-> 10.0.0.6
+
+============================================================
+  ALERTA #4 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0c  <-- FALSO
+  Bridge alvo     : s1
+  Ambiente        : LINUX
+============================================================
+
+[INFO] Modo passivo — use --nac para bloqueio automático.
+
+  >>> [DETECTADO] Rodada 4: ataque de h12 (00:00:00:00:00:0c) foi identificado pelo IDS
+  >>> RESULTADO DOS ATAQUES: 4/4 detectados
+
+------------------------------------------------------------------------------
+ [s1 #1] Falso positivo — host reincidente (h3)
+------------------------------------------------------------------------------
+  >>> [OK] Rodada 1: h3 legítimo não gerou alerta
+  >>> [OK] Rodada 2: h3 legítimo não gerou alerta
+  >>> [OK] Rodada 3: h3 legítimo não gerou alerta
+  >>> RESULTADO FALSOS POSITIVOS: 0/3
+
+------------------------------------------------------------------------------
+ [s1 #1] Host genuinamente novo pós-aprendizado (h9)
+------------------------------------------------------------------------------
+[NEW?]         10.0.0.9  ->  00:00:00:00:00:09  (host não aprendido, aguardando confirmação...)
+[NEW]  Host confirmado após o aprendizado: 10.0.0.9 -> 00:00:00:00:00:09
+[AVISO] Host não estava na fase de aprendizado — verifique se essa entrada era esperada.
+
+  >>> RESULTADO HOST NOVO (h9): visto pelo IDS=True, alertas de spoofing=0 -> ACEITO corretamente
+[PROGRESSO] 1/1 execuções concluídas em 2.3 min.
+
+==============================================================================
+ RESUMO FINAL
+==============================================================================
+Cada cenário foi executado 1 vez(es), com a topologia reconstruída do zero a cada repetição. Cada rodada de ataque usou um MAC de atacante distinto, simulando dispositivos diferentes.  
+
+Cenário   Execuções   Detecção/rodada     Taxa      
+------------------------------------------------------------------------------
+s1        1           4/4                 100.0%
+
+Cenário   Falsos + (h3)     Taxa FP     Host novo aceito (h9)   Alertas h9  
+------------------------------------------------------------------------------
+s1        0/3               0.0%        1/1                     0           
+
+Cenário   Lat. base (ms)      Lat. c/IDS (ms)     Overhead    
+------------------------------------------------------------------------------
+s1        9.14±0.00           9.19±0.00           +0.6%       
+
+Cenário   Banda base (Mbps)     Banda c/IDS (Mbps)    Overhead    
+------------------------------------------------------------------------------
+s1        9.51±0.00             9.49±0.00             -0.2%       
+
+RESUMO GERAL (todos os cenários e repetições agregados):
+  Taxa de detecção geral (por rodada) : 4/4 (100.0%)
+  Taxa de falso positivo (h3)         : 0/3 (0.0%)
+  Host novo aceito corretamente (h9)  : 1/1 (100.0%)
+
+
+==============================================================================
+ FIM DOS TESTES
+ Tempo total: 2.3 minutos
+==============================================================================

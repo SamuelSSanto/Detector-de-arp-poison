@@ -1,0 +1,2570 @@
+==============================================================================
+ RESULTADOS DOS TESTES EXPERIMENTAIS
+ Detecção de ARP Poisoning em Redes Industriais com Python
+ Gerado em: 14/11/2026 02:46:12
+==============================================================================
+
+Parâmetros usados nesta execução:
+  Tempo de aprendizado........: 15s
+  Repetições por cenário......: 5
+  Rodadas de ataque/execução..: 4 (MAC de atacante diferente a cada rodada)
+  Rodadas de falso positivo...: 3 (host reincidente h3)
+  Rodadas de host novo........: 3 (host inédito h9)
+  Amostras de overhead........: 3x de 50 pacotes / 10s
+  Cenários (posição de h8)....: s1, s2, s3
+  Total de execuções completas: 15
+
+==============================================================================
+ CENÁRIO s1 — EXECUÇÃO 1/5 (geral: 1/15)
+==============================================================================
+[TOPO] Criando rede com atacante (h8) ligado a s1...
+[TOPO] Espelho s1: s1-spn (push VLAN 101) -> s1-rx1 -> s1-eth7
+[TOPO] Espelho s2: s2-spn (push VLAN 102) -> s1-rx2 -> s1-eth7
+[TOPO] Espelho s3: s3-spn (push VLAN 103) -> s1-rx3 -> s1-eth7
+[TOPO] Espelho em s1: saída=s1-spn  monitorando=['s1-eth1', 's1-eth2', 's1-eth3', 's1-eth4', 's1-eth5', 's1-eth6', 's1-eth8']
+[TOPO] Espelho em s2: saída=s2-spn  monitorando=['s2-eth1', 's2-eth2', 's2-eth3', 's2-eth4']
+[TOPO] Espelho em s3: saída=s3-spn  monitorando=['s3-eth1', 's3-eth2', 's3-eth3', 's3-eth4']
+[TOPO] Testando conectividade inicial (warm-up de ARP, exceto h9)...
+
+------------------------------------------------------------------------------
+ [s1 #1] Overhead BASELINE (3x, 50 pacotes, 10s)
+------------------------------------------------------------------------------
+  [baseline] medição 1/3: latência=18.779 ms, banda=9.0 Mbps
+  [baseline] medição 2/3: latência=19.248 ms, banda=9.16 Mbps
+  [baseline] medição 3/3: latência=9.913 ms, banda=8.95 Mbps
+
+------------------------------------------------------------------------------
+ [s1 #1] Iniciando detector único (espelho de s1+s2+s3 via VLAN, aprendizado: 15s)
+------------------------------------------------------------------------------
+
+============================================================
+  ARP IDS — Detector Híbrido de ARP Spoofing
+============================================================
+  Ambiente   : MININET
+  Interfaces : h7-eth0
+  Mapa VLAN  : {101: 's1', 102: 's2', 103: 's3'}
+  Modo NAC   : ATIVO (bloqueio automático)
+  Método     : ovs-ofctl (bridge padrão: s1)
+  Aprendizado: 15s
+  Confirmação: 2 pacotes por IP/MAC
+  Debug      : inativo
+============================================================
+
+[INFO] Fase de aprendizado iniciada (15s)...
+[LEARN?]         10.0.0.7  ->  00:00:00:00:00:07  (aguardando confirmação...)
+[LEARN]          10.0.0.7  ->  00:00:00:00:00:07  ✓
+[LEARN?]         10.0.0.6  ->  00:00:00:00:00:06  (aguardando confirmação...)
+[LEARN]          10.0.0.6  ->  00:00:00:00:00:06  ✓
+[LEARN?]         10.0.0.5  ->  00:00:00:00:00:05  (aguardando confirmação...)
+[LEARN]          10.0.0.5  ->  00:00:00:00:00:05  ✓
+[LEARN?]         10.0.0.4  ->  00:00:00:00:00:04  (aguardando confirmação...)
+[LEARN]          10.0.0.4  ->  00:00:00:00:00:04  ✓
+[LEARN?]        10.0.0.12  ->  00:00:00:00:00:0c  (aguardando confirmação...)
+[LEARN]         10.0.0.12  ->  00:00:00:00:00:0c  ✓
+[LEARN?]        10.0.0.11  ->  00:00:00:00:00:0b  (aguardando confirmação...)
+[LEARN?]        10.0.0.10  ->  00:00:00:00:00:0a  (aguardando confirmação...)
+[LEARN?]         10.0.0.8  ->  00:00:00:00:00:08  (aguardando confirmação...)
+[LEARN?]         10.0.0.3  ->  00:00:00:00:00:03  (aguardando confirmação...)
+[LEARN]         10.0.0.11  ->  00:00:00:00:00:0b  ✓
+[LEARN]         10.0.0.10  ->  00:00:00:00:00:0a  ✓
+[LEARN]          10.0.0.8  ->  00:00:00:00:00:08  ✓
+[LEARN?]         10.0.0.2  ->  00:00:00:00:00:02  (aguardando confirmação...)
+[LEARN]          10.0.0.3  ->  00:00:00:00:00:03  ✓
+[LEARN]          10.0.0.2  ->  00:00:00:00:00:02  ✓
+[LEARN?]         10.0.0.1  ->  00:00:00:00:00:01  (aguardando confirmação...)
+[LEARN]          10.0.0.1  ->  00:00:00:00:00:01  ✓
+
+[INFO] Aprendizado concluído. 11 host(s) mapeado(s). Monitorando...
+
+                 10.0.0.1  ->  00:00:00:00:00:01
+                10.0.0.10  ->  00:00:00:00:00:0a
+                10.0.0.11  ->  00:00:00:00:00:0b
+                10.0.0.12  ->  00:00:00:00:00:0c
+                 10.0.0.2  ->  00:00:00:00:00:02
+                 10.0.0.3  ->  00:00:00:00:00:03
+                 10.0.0.4  ->  00:00:00:00:00:04
+                 10.0.0.5  ->  00:00:00:00:00:05
+                 10.0.0.6  ->  00:00:00:00:00:06
+                 10.0.0.7  ->  00:00:00:00:00:07
+                 10.0.0.8  ->  00:00:00:00:00:08
+
+[INFO] Origem dos ARPs no aprendizado: s1=75 s2=36 s3=48 sem-tag=18
+ 
+
+------------------------------------------------------------------------------
+ [s1 #1] Overhead COM detector ativo
+------------------------------------------------------------------------------
+  [com IDS] medição 1/3: latência=37.912 ms, banda=6.74 Mbps
+  [com IDS] medição 2/3: latência=9.636 ms, banda=7.7 Mbps
+  [com IDS] medição 3/3: latência=9.282 ms, banda=8.8 Mbps
+
+------------------------------------------------------------------------------
+ [s1 #1] Rodadas de ataque (hosts atacantes dedicados por rodada)
+------------------------------------------------------------------------------
+  Rodada 1/4: atacante=h8 (00:00:00:00:00:08)  arpspoof 10.0.0.1 <-> 10.0.0.2
+
+============================================================
+  ALERTA #1 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.2
+  MAC legítimo    : 00:00:00:00:00:02
+  MAC atacante    : 00:00:00:00:00:08  <-- FALSO
+  Bridge alvo     : s1
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:08 na bridge s1 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's1' para 00:00:00:00:00:08
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 2/4: atacante=h10 (00:00:00:00:00:0a)  arpspoof 10.0.0.4 <-> 10.0.0.5
+
+============================================================
+  ALERTA #2 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.5
+  MAC legítimo    : 00:00:00:00:00:05
+  MAC atacante    : 00:00:00:00:00:0a  <-- FALSO
+  Bridge alvo     : s1
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0a na bridge s1 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's1' para 00:00:00:00:00:0a
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 3/4: atacante=h11 (00:00:00:00:00:0b)  arpspoof 10.0.0.3 <-> 10.0.0.6
+
+============================================================
+  ALERTA #3 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0b  <-- FALSO
+  Bridge alvo     : s1
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0b na bridge s1 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's1' para 00:00:00:00:00:0b
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 4/4: atacante=h12 (00:00:00:00:00:0c)  arpspoof 10.0.0.1 <-> 10.0.0.6
+
+============================================================
+  ALERTA #4 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0c  <-- FALSO
+  Bridge alvo     : s1
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0c na bridge s1 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's1' para 00:00:00:00:00:0c
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+
+------------------------------------------------------------------------------
+ [s1 #1] Falso positivo — host reincidente (h3)
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+ [s1 #1] Host genuinamente novo pós-aprendizado (h9)
+------------------------------------------------------------------------------
+[NEW?]         10.0.0.9  ->  00:00:00:00:00:09  (host não aprendido, aguardando confirmação...)
+[NEW]  Host confirmado após o aprendizado: 10.0.0.9 -> 00:00:00:00:00:09
+[AVISO] Host não estava na fase de aprendizado — verifique se essa entrada era esperada.
+
+
+[PROGRESSO] 1/15 execuções concluídas em 3.9 min.
+
+==============================================================================
+ CENÁRIO s1 — EXECUÇÃO 2/5 (geral: 2/15)
+==============================================================================
+[TOPO] Criando rede com atacante (h8) ligado a s1...
+[TOPO] Espelho s1: s1-spn (push VLAN 101) -> s1-rx1 -> s1-eth7
+[TOPO] Espelho s2: s2-spn (push VLAN 102) -> s1-rx2 -> s1-eth7
+[TOPO] Espelho s3: s3-spn (push VLAN 103) -> s1-rx3 -> s1-eth7
+[TOPO] Espelho em s1: saída=s1-spn  monitorando=['s1-eth1', 's1-eth2', 's1-eth3', 's1-eth4', 's1-eth5', 's1-eth6', 's1-eth8']
+[TOPO] Espelho em s2: saída=s2-spn  monitorando=['s2-eth1', 's2-eth2', 's2-eth3', 's2-eth4']
+[TOPO] Espelho em s3: saída=s3-spn  monitorando=['s3-eth1', 's3-eth2', 's3-eth3', 's3-eth4']
+[TOPO] Testando conectividade inicial (warm-up de ARP, exceto h9)...
+
+------------------------------------------------------------------------------
+ [s1 #2] Overhead BASELINE (3x, 50 pacotes, 10s)
+------------------------------------------------------------------------------
+  [baseline] medição 1/3: latência=10.22 ms, banda=9.46 Mbps
+  [baseline] medição 2/3: latência=9.122 ms, banda=8.79 Mbps
+  [baseline] medição 3/3: latência=9.042 ms, banda=9.11 Mbps
+
+------------------------------------------------------------------------------
+ [s1 #2] Iniciando detector único (espelho de s1+s2+s3 via VLAN, aprendizado: 15s)
+------------------------------------------------------------------------------
+
+============================================================
+  ARP IDS — Detector Híbrido de ARP Spoofing
+============================================================
+  Ambiente   : MININET
+  Interfaces : h7-eth0
+  Mapa VLAN  : {101: 's1', 102: 's2', 103: 's3'}
+  Modo NAC   : ATIVO (bloqueio automático)
+  Método     : ovs-ofctl (bridge padrão: s1)
+  Aprendizado: 15s
+  Confirmação: 2 pacotes por IP/MAC
+  Debug      : inativo
+============================================================
+
+[INFO] Fase de aprendizado iniciada (15s)...
+[LEARN?]        10.0.0.12  ->  00:00:00:00:00:0c  (aguardando confirmação...)
+[LEARN]         10.0.0.12  ->  00:00:00:00:00:0c  ✓
+[LEARN?]         10.0.0.8  ->  00:00:00:00:00:08  (aguardando confirmação...)
+[LEARN]          10.0.0.8  ->  00:00:00:00:00:08  ✓
+[LEARN?]         10.0.0.7  ->  00:00:00:00:00:07  (aguardando confirmação...)
+[LEARN?]        10.0.0.10  ->  00:00:00:00:00:0a  (aguardando confirmação...)
+[LEARN]         10.0.0.10  ->  00:00:00:00:00:0a  ✓
+[LEARN]          10.0.0.7  ->  00:00:00:00:00:07  ✓
+[LEARN?]        10.0.0.11  ->  00:00:00:00:00:0b  (aguardando confirmação...)
+[LEARN]         10.0.0.11  ->  00:00:00:00:00:0b  ✓
+[LEARN?]         10.0.0.4  ->  00:00:00:00:00:04  (aguardando confirmação...)
+[LEARN]          10.0.0.4  ->  00:00:00:00:00:04  ✓
+[LEARN?]         10.0.0.3  ->  00:00:00:00:00:03  (aguardando confirmação...)
+[LEARN]          10.0.0.3  ->  00:00:00:00:00:03  ✓
+[LEARN?]         10.0.0.6  ->  00:00:00:00:00:06  (aguardando confirmação...)
+[LEARN?]         10.0.0.5  ->  00:00:00:00:00:05  (aguardando confirmação...)
+[LEARN?]         10.0.0.2  ->  00:00:00:00:00:02  (aguardando confirmação...)
+[LEARN]          10.0.0.6  ->  00:00:00:00:00:06  ✓
+[LEARN]          10.0.0.5  ->  00:00:00:00:00:05  ✓
+[LEARN]          10.0.0.2  ->  00:00:00:00:00:02  ✓
+[LEARN?]         10.0.0.1  ->  00:00:00:00:00:01  (aguardando confirmação...)
+[LEARN]          10.0.0.1  ->  00:00:00:00:00:01  ✓
+
+[INFO] Aprendizado concluído. 11 host(s) mapeado(s). Monitorando...
+
+                 10.0.0.1  ->  00:00:00:00:00:01
+                10.0.0.10  ->  00:00:00:00:00:0a
+                10.0.0.11  ->  00:00:00:00:00:0b
+                10.0.0.12  ->  00:00:00:00:00:0c
+                 10.0.0.2  ->  00:00:00:00:00:02
+                 10.0.0.3  ->  00:00:00:00:00:03
+                 10.0.0.4  ->  00:00:00:00:00:04
+                 10.0.0.5  ->  00:00:00:00:00:05
+                 10.0.0.6  ->  00:00:00:00:00:06
+                 10.0.0.7  ->  00:00:00:00:00:07
+                 10.0.0.8  ->  00:00:00:00:00:08
+
+[INFO] Origem dos ARPs no aprendizado: s1=105 s2=64 s3=65 sem-tag=34
+
+
+
+
+------------------------------------------------------------------------------
+ [s1 #2] Overhead COM detector ativo
+------------------------------------------------------------------------------
+  [com IDS] medição 1/3: latência=9.507 ms, banda=9.23 Mbps
+  [com IDS] medição 2/3: latência=13.026 ms, banda=8.99 Mbps
+  [com IDS] medição 3/3: latência=9.279 ms, banda=9.28 Mbps
+
+------------------------------------------------------------------------------
+ [s1 #2] Rodadas de ataque (hosts atacantes dedicados por rodada)
+------------------------------------------------------------------------------
+  Rodada 1/4: atacante=h8 (00:00:00:00:00:08)  arpspoof 10.0.0.1 <-> 10.0.0.2
+
+============================================================
+  ALERTA #1 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.2
+  MAC legítimo    : 00:00:00:00:00:02
+  MAC atacante    : 00:00:00:00:00:08  <-- FALSO
+  Bridge alvo     : s1
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:08 na bridge s1 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's1' para 00:00:00:00:00:08
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 2/4: atacante=h10 (00:00:00:00:00:0a)  arpspoof 10.0.0.4 <-> 10.0.0.5
+
+============================================================
+  ALERTA #2 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.5
+  MAC legítimo    : 00:00:00:00:00:05
+  MAC atacante    : 00:00:00:00:00:0a  <-- FALSO
+  Bridge alvo     : s1
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0a na bridge s1 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's1' para 00:00:00:00:00:0a
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 3/4: atacante=h11 (00:00:00:00:00:0b)  arpspoof 10.0.0.3 <-> 10.0.0.6
+
+============================================================
+  ALERTA #3 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0b  <-- FALSO
+  Bridge alvo     : s1
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0b na bridge s1 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's1' para 00:00:00:00:00:0b
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 4/4: atacante=h12 (00:00:00:00:00:0c)  arpspoof 10.0.0.1 <-> 10.0.0.6
+
+============================================================
+  ALERTA #4 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0c  <-- FALSO
+  Bridge alvo     : s1
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0c na bridge s1 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's1' para 00:00:00:00:00:0c
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+
+------------------------------------------------------------------------------
+ [s1 #2] Falso positivo — host reincidente (h3)
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+ [s1 #2] Host genuinamente novo pós-aprendizado (h9)
+------------------------------------------------------------------------------
+[NEW?]         10.0.0.9  ->  00:00:00:00:00:09  (host não aprendido, aguardando confirmação...)
+[NEW]  Host confirmado após o aprendizado: 10.0.0.9 -> 00:00:00:00:00:09
+[AVISO] Host não estava na fase de aprendizado — verifique se essa entrada era esperada.
+
+ 
+[PROGRESSO] 2/15 execuções concluídas em 7.7 min.
+
+==============================================================================
+ CENÁRIO s1 — EXECUÇÃO 3/5 (geral: 3/15)
+==============================================================================
+[TOPO] Criando rede com atacante (h8) ligado a s1...
+[TOPO] Espelho s1: s1-spn (push VLAN 101) -> s1-rx1 -> s1-eth7
+[TOPO] Espelho s2: s2-spn (push VLAN 102) -> s1-rx2 -> s1-eth7
+[TOPO] Espelho s3: s3-spn (push VLAN 103) -> s1-rx3 -> s1-eth7
+[TOPO] Espelho em s1: saída=s1-spn  monitorando=['s1-eth1', 's1-eth2', 's1-eth3', 's1-eth4', 's1-eth5', 's1-eth6', 's1-eth8']
+[TOPO] Espelho em s2: saída=s2-spn  monitorando=['s2-eth1', 's2-eth2', 's2-eth3', 's2-eth4']
+[TOPO] Espelho em s3: saída=s3-spn  monitorando=['s3-eth1', 's3-eth2', 's3-eth3', 's3-eth4']
+[TOPO] Testando conectividade inicial (warm-up de ARP, exceto h9)...
+
+------------------------------------------------------------------------------
+ [s1 #3] Overhead BASELINE (3x, 50 pacotes, 10s)
+------------------------------------------------------------------------------
+  [baseline] medição 1/3: latência=9.659 ms, banda=9.35 Mbps
+  [baseline] medição 2/3: latência=27.713 ms, banda=5.75 Mbps
+  [baseline] medição 3/3: latência=31.94 ms, banda=8.76 Mbps
+
+------------------------------------------------------------------------------
+ [s1 #3] Iniciando detector único (espelho de s1+s2+s3 via VLAN, aprendizado: 15s)
+------------------------------------------------------------------------------
+
+============================================================
+  ARP IDS — Detector Híbrido de ARP Spoofing
+============================================================
+  Ambiente   : MININET
+  Interfaces : h7-eth0
+  Mapa VLAN  : {101: 's1', 102: 's2', 103: 's3'}
+  Modo NAC   : ATIVO (bloqueio automático)
+  Método     : ovs-ofctl (bridge padrão: s1)
+  Aprendizado: 15s
+  Confirmação: 2 pacotes por IP/MAC
+  Debug      : inativo
+============================================================
+
+[INFO] Fase de aprendizado iniciada (15s)...
+[LEARN?]         10.0.0.8  ->  00:00:00:00:00:08  (aguardando confirmação...)
+[LEARN]          10.0.0.8  ->  00:00:00:00:00:08  ✓
+[LEARN?]         10.0.0.7  ->  00:00:00:00:00:07  (aguardando confirmação...)
+[LEARN?]        10.0.0.10  ->  00:00:00:00:00:0a  (aguardando confirmação...)
+[LEARN]         10.0.0.10  ->  00:00:00:00:00:0a  ✓
+[LEARN]          10.0.0.7  ->  00:00:00:00:00:07  ✓
+[LEARN?]        10.0.0.11  ->  00:00:00:00:00:0b  (aguardando confirmação...)
+[LEARN]         10.0.0.11  ->  00:00:00:00:00:0b  ✓
+[LEARN?]        10.0.0.12  ->  00:00:00:00:00:0c  (aguardando confirmação...)
+[LEARN]         10.0.0.12  ->  00:00:00:00:00:0c  ✓
+[LEARN?]         10.0.0.3  ->  00:00:00:00:00:03  (aguardando confirmação...)
+[LEARN?]         10.0.0.2  ->  00:00:00:00:00:02  (aguardando confirmação...)
+[LEARN?]         10.0.0.1  ->  00:00:00:00:00:01  (aguardando confirmação...)
+[LEARN]          10.0.0.1  ->  00:00:00:00:00:01  ✓
+[LEARN?]         10.0.0.6  ->  00:00:00:00:00:06  (aguardando confirmação...)
+[LEARN]          10.0.0.6  ->  00:00:00:00:00:06  ✓
+[LEARN?]         10.0.0.5  ->  00:00:00:00:00:05  (aguardando confirmação...)
+[LEARN]          10.0.0.5  ->  00:00:00:00:00:05  ✓
+[LEARN?]         10.0.0.4  ->  00:00:00:00:00:04  (aguardando confirmação...)
+[LEARN]          10.0.0.4  ->  00:00:00:00:00:04  ✓
+[LEARN]          10.0.0.3  ->  00:00:00:00:00:03  ✓
+[LEARN]          10.0.0.2  ->  00:00:00:00:00:02  ✓
+
+[INFO] Aprendizado concluído. 11 host(s) mapeado(s). Monitorando...
+
+                 10.0.0.1  ->  00:00:00:00:00:01
+                10.0.0.10  ->  00:00:00:00:00:0a
+                10.0.0.11  ->  00:00:00:00:00:0b
+                10.0.0.12  ->  00:00:00:00:00:0c
+                 10.0.0.2  ->  00:00:00:00:00:02
+                 10.0.0.3  ->  00:00:00:00:00:03
+                 10.0.0.4  ->  00:00:00:00:00:04
+                 10.0.0.5  ->  00:00:00:00:00:05
+                 10.0.0.6  ->  00:00:00:00:00:06
+                 10.0.0.7  ->  00:00:00:00:00:07
+                 10.0.0.8  ->  00:00:00:00:00:08
+
+[INFO] Origem dos ARPs no aprendizado: s1=104 s2=64 s3=64 sem-tag=34
+ 
+
+
+
+------------------------------------------------------------------------------
+ [s1 #3] Overhead COM detector ativo
+------------------------------------------------------------------------------
+  [com IDS] medição 1/3: latência=9.258 ms, banda=9.55 Mbps
+  [com IDS] medição 2/3: latência=9.166 ms, banda=9.48 Mbps
+  [com IDS] medição 3/3: latência=22.813 ms, banda=9.44 Mbps
+
+------------------------------------------------------------------------------
+ [s1 #3] Rodadas de ataque (hosts atacantes dedicados por rodada)
+------------------------------------------------------------------------------
+  Rodada 1/4: atacante=h8 (00:00:00:00:00:08)  arpspoof 10.0.0.1 <-> 10.0.0.2
+
+============================================================
+  ALERTA #1 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.2
+  MAC legítimo    : 00:00:00:00:00:02
+  MAC atacante    : 00:00:00:00:00:08  <-- FALSO
+  Bridge alvo     : s1
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:08 na bridge s1 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's1' para 00:00:00:00:00:08
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 2/4: atacante=h10 (00:00:00:00:00:0a)  arpspoof 10.0.0.4 <-> 10.0.0.5
+
+============================================================
+  ALERTA #2 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.5
+  MAC legítimo    : 00:00:00:00:00:05
+  MAC atacante    : 00:00:00:00:00:0a  <-- FALSO
+  Bridge alvo     : s1
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0a na bridge s1 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's1' para 00:00:00:00:00:0a
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 3/4: atacante=h11 (00:00:00:00:00:0b)  arpspoof 10.0.0.3 <-> 10.0.0.6
+
+============================================================
+  ALERTA #3 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0b  <-- FALSO
+  Bridge alvo     : s1
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0b na bridge s1 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's1' para 00:00:00:00:00:0b
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 4/4: atacante=h12 (00:00:00:00:00:0c)  arpspoof 10.0.0.1 <-> 10.0.0.6
+
+============================================================
+  ALERTA #4 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0c  <-- FALSO
+  Bridge alvo     : s1
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0c na bridge s1 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's1' para 00:00:00:00:00:0c
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+
+------------------------------------------------------------------------------
+ [s1 #3] Falso positivo — host reincidente (h3)
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+ [s1 #3] Host genuinamente novo pós-aprendizado (h9)
+------------------------------------------------------------------------------
+[NEW?]         10.0.0.9  ->  00:00:00:00:00:09  (host não aprendido, aguardando confirmação...)
+[NEW]  Host confirmado após o aprendizado: 10.0.0.9 -> 00:00:00:00:00:09
+[AVISO] Host não estava na fase de aprendizado — verifique se essa entrada era esperada.
+
+ 
+[PROGRESSO] 3/15 execuções concluídas em 11.5 min.
+
+==============================================================================
+ CENÁRIO s1 — EXECUÇÃO 4/5 (geral: 4/15)
+==============================================================================
+[TOPO] Criando rede com atacante (h8) ligado a s1...
+[TOPO] Espelho s1: s1-spn (push VLAN 101) -> s1-rx1 -> s1-eth7
+[TOPO] Espelho s2: s2-spn (push VLAN 102) -> s1-rx2 -> s1-eth7
+[TOPO] Espelho s3: s3-spn (push VLAN 103) -> s1-rx3 -> s1-eth7
+[TOPO] Espelho em s1: saída=s1-spn  monitorando=['s1-eth1', 's1-eth2', 's1-eth3', 's1-eth4', 's1-eth5', 's1-eth6', 's1-eth8']
+[TOPO] Espelho em s2: saída=s2-spn  monitorando=['s2-eth1', 's2-eth2', 's2-eth3', 's2-eth4']
+[TOPO] Espelho em s3: saída=s3-spn  monitorando=['s3-eth1', 's3-eth2', 's3-eth3', 's3-eth4']
+[TOPO] Testando conectividade inicial (warm-up de ARP, exceto h9)...
+
+------------------------------------------------------------------------------
+ [s1 #4] Overhead BASELINE (3x, 50 pacotes, 10s)
+------------------------------------------------------------------------------
+  [baseline] medição 1/3: latência=8.886 ms, banda=9.46 Mbps
+  [baseline] medição 2/3: latência=9.626 ms, banda=9.54 Mbps
+  [baseline] medição 3/3: latência=9.198 ms, banda=9.54 Mbps
+
+------------------------------------------------------------------------------
+ [s1 #4] Iniciando detector único (espelho de s1+s2+s3 via VLAN, aprendizado: 15s)
+------------------------------------------------------------------------------
+
+============================================================
+  ARP IDS — Detector Híbrido de ARP Spoofing
+============================================================
+  Ambiente   : MININET
+  Interfaces : h7-eth0
+  Mapa VLAN  : {101: 's1', 102: 's2', 103: 's3'}
+  Modo NAC   : ATIVO (bloqueio automático)
+  Método     : ovs-ofctl (bridge padrão: s1)
+  Aprendizado: 15s
+  Confirmação: 2 pacotes por IP/MAC
+  Debug      : inativo
+============================================================
+
+[INFO] Fase de aprendizado iniciada (15s)...
+[LEARN?]         10.0.0.1  ->  00:00:00:00:00:01  (aguardando confirmação...)
+[LEARN]          10.0.0.1  ->  00:00:00:00:00:01  ✓
+[LEARN?]         10.0.0.2  ->  00:00:00:00:00:02  (aguardando confirmação...)
+[LEARN?]         10.0.0.3  ->  00:00:00:00:00:03  (aguardando confirmação...)
+[LEARN?]         10.0.0.4  ->  00:00:00:00:00:04  (aguardando confirmação...)
+[LEARN]          10.0.0.4  ->  00:00:00:00:00:04  ✓
+[LEARN?]         10.0.0.5  ->  00:00:00:00:00:05  (aguardando confirmação...)
+[LEARN]          10.0.0.5  ->  00:00:00:00:00:05  ✓
+[LEARN?]         10.0.0.6  ->  00:00:00:00:00:06  (aguardando confirmação...)
+[LEARN]          10.0.0.6  ->  00:00:00:00:00:06  ✓
+[LEARN?]         10.0.0.7  ->  00:00:00:00:00:07  (aguardando confirmação...)
+[LEARN]          10.0.0.7  ->  00:00:00:00:00:07  ✓
+[LEARN?]         10.0.0.8  ->  00:00:00:00:00:08  (aguardando confirmação...)
+[LEARN]          10.0.0.8  ->  00:00:00:00:00:08  ✓
+[LEARN?]        10.0.0.10  ->  00:00:00:00:00:0a  (aguardando confirmação...)
+[LEARN]         10.0.0.10  ->  00:00:00:00:00:0a  ✓
+[LEARN?]        10.0.0.11  ->  00:00:00:00:00:0b  (aguardando confirmação...)
+[LEARN]         10.0.0.11  ->  00:00:00:00:00:0b  ✓
+[LEARN?]        10.0.0.12  ->  00:00:00:00:00:0c  (aguardando confirmação...)
+[LEARN]         10.0.0.12  ->  00:00:00:00:00:0c  ✓
+[LEARN]          10.0.0.2  ->  00:00:00:00:00:02  ✓
+[LEARN]          10.0.0.3  ->  00:00:00:00:00:03  ✓
+
+[INFO] Aprendizado concluído. 11 host(s) mapeado(s). Monitorando...
+
+                 10.0.0.1  ->  00:00:00:00:00:01
+                10.0.0.10  ->  00:00:00:00:00:0a
+                10.0.0.11  ->  00:00:00:00:00:0b
+                10.0.0.12  ->  00:00:00:00:00:0c
+                 10.0.0.2  ->  00:00:00:00:00:02
+                 10.0.0.3  ->  00:00:00:00:00:03
+                 10.0.0.4  ->  00:00:00:00:00:04
+                 10.0.0.5  ->  00:00:00:00:00:05
+                 10.0.0.6  ->  00:00:00:00:00:06
+                 10.0.0.7  ->  00:00:00:00:00:07
+                 10.0.0.8  ->  00:00:00:00:00:08
+
+[INFO] Origem dos ARPs no aprendizado: s1=182 s2=136 s3=136 sem-tag=85
+
+
+
+
+------------------------------------------------------------------------------
+ [s1 #4] Overhead COM detector ativo
+------------------------------------------------------------------------------
+  [com IDS] medição 1/3: latência=9.164 ms, banda=9.54 Mbps
+  [com IDS] medição 2/3: latência=9.06 ms, banda=9.49 Mbps
+  [com IDS] medição 3/3: latência=8.891 ms, banda=9.49 Mbps
+
+------------------------------------------------------------------------------
+ [s1 #4] Rodadas de ataque (hosts atacantes dedicados por rodada)
+------------------------------------------------------------------------------
+  Rodada 1/4: atacante=h8 (00:00:00:00:00:08)  arpspoof 10.0.0.1 <-> 10.0.0.2
+
+============================================================
+  ALERTA #1 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.2
+  MAC legítimo    : 00:00:00:00:00:02
+  MAC atacante    : 00:00:00:00:00:08  <-- FALSO
+  Bridge alvo     : s1
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:08 na bridge s1 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's1' para 00:00:00:00:00:08
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 2/4: atacante=h10 (00:00:00:00:00:0a)  arpspoof 10.0.0.4 <-> 10.0.0.5
+
+============================================================
+  ALERTA #2 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.5
+  MAC legítimo    : 00:00:00:00:00:05
+  MAC atacante    : 00:00:00:00:00:0a  <-- FALSO
+  Bridge alvo     : s1
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0a na bridge s1 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's1' para 00:00:00:00:00:0a
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 3/4: atacante=h11 (00:00:00:00:00:0b)  arpspoof 10.0.0.3 <-> 10.0.0.6
+
+============================================================
+  ALERTA #3 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0b  <-- FALSO
+  Bridge alvo     : s1
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0b na bridge s1 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's1' para 00:00:00:00:00:0b
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 4/4: atacante=h12 (00:00:00:00:00:0c)  arpspoof 10.0.0.1 <-> 10.0.0.6
+
+============================================================
+  ALERTA #4 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0c  <-- FALSO
+  Bridge alvo     : s1
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0c na bridge s1 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's1' para 00:00:00:00:00:0c
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+
+------------------------------------------------------------------------------
+ [s1 #4] Falso positivo — host reincidente (h3)
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+ [s1 #4] Host genuinamente novo pós-aprendizado (h9)
+------------------------------------------------------------------------------
+[NEW?]         10.0.0.9  ->  00:00:00:00:00:09  (host não aprendido, aguardando confirmação...)
+[NEW]  Host confirmado após o aprendizado: 10.0.0.9 -> 00:00:00:00:00:09
+[AVISO] Host não estava na fase de aprendizado — verifique se essa entrada era esperada.
+
+ 
+[PROGRESSO] 4/15 execuções concluídas em 15.2 min.
+
+==============================================================================
+ CENÁRIO s1 — EXECUÇÃO 5/5 (geral: 5/15)
+==============================================================================
+[TOPO] Criando rede com atacante (h8) ligado a s1...
+[TOPO] Espelho s1: s1-spn (push VLAN 101) -> s1-rx1 -> s1-eth7
+[TOPO] Espelho s2: s2-spn (push VLAN 102) -> s1-rx2 -> s1-eth7
+[TOPO] Espelho s3: s3-spn (push VLAN 103) -> s1-rx3 -> s1-eth7
+[TOPO] Espelho em s1: saída=s1-spn  monitorando=['s1-eth1', 's1-eth2', 's1-eth3', 's1-eth4', 's1-eth5', 's1-eth6', 's1-eth8']
+[TOPO] Espelho em s2: saída=s2-spn  monitorando=['s2-eth1', 's2-eth2', 's2-eth3', 's2-eth4']
+[TOPO] Espelho em s3: saída=s3-spn  monitorando=['s3-eth1', 's3-eth2', 's3-eth3', 's3-eth4']
+[TOPO] Testando conectividade inicial (warm-up de ARP, exceto h9)...
+
+------------------------------------------------------------------------------
+ [s1 #5] Overhead BASELINE (3x, 50 pacotes, 10s)
+------------------------------------------------------------------------------
+  [baseline] medição 1/3: latência=9.371 ms, banda=9.54 Mbps
+  [baseline] medição 2/3: latência=9.615 ms, banda=9.53 Mbps
+  [baseline] medição 3/3: latência=9.26 ms, banda=9.54 Mbps
+
+------------------------------------------------------------------------------
+ [s1 #5] Iniciando detector único (espelho de s1+s2+s3 via VLAN, aprendizado: 15s)
+------------------------------------------------------------------------------
+
+============================================================
+  ARP IDS — Detector Híbrido de ARP Spoofing
+============================================================
+  Ambiente   : MININET
+  Interfaces : h7-eth0
+  Mapa VLAN  : {101: 's1', 102: 's2', 103: 's3'}
+  Modo NAC   : ATIVO (bloqueio automático)
+  Método     : ovs-ofctl (bridge padrão: s1)
+  Aprendizado: 15s
+  Confirmação: 2 pacotes por IP/MAC
+  Debug      : inativo
+============================================================
+
+[INFO] Fase de aprendizado iniciada (15s)...
+[LEARN?]         10.0.0.1  ->  00:00:00:00:00:01  (aguardando confirmação...)
+[LEARN]          10.0.0.1  ->  00:00:00:00:00:01  ✓
+[LEARN?]         10.0.0.2  ->  00:00:00:00:00:02  (aguardando confirmação...)
+[LEARN?]         10.0.0.3  ->  00:00:00:00:00:03  (aguardando confirmação...)
+[LEARN?]         10.0.0.4  ->  00:00:00:00:00:04  (aguardando confirmação...)
+[LEARN]          10.0.0.4  ->  00:00:00:00:00:04  ✓
+[LEARN?]         10.0.0.5  ->  00:00:00:00:00:05  (aguardando confirmação...)
+[LEARN]          10.0.0.5  ->  00:00:00:00:00:05  ✓
+[LEARN?]         10.0.0.6  ->  00:00:00:00:00:06  (aguardando confirmação...)
+[LEARN]          10.0.0.6  ->  00:00:00:00:00:06  ✓
+[LEARN?]         10.0.0.7  ->  00:00:00:00:00:07  (aguardando confirmação...)
+[LEARN]          10.0.0.7  ->  00:00:00:00:00:07  ✓
+[LEARN?]         10.0.0.8  ->  00:00:00:00:00:08  (aguardando confirmação...)
+[LEARN]          10.0.0.8  ->  00:00:00:00:00:08  ✓
+[LEARN?]        10.0.0.10  ->  00:00:00:00:00:0a  (aguardando confirmação...)
+[LEARN]         10.0.0.10  ->  00:00:00:00:00:0a  ✓
+[LEARN?]        10.0.0.11  ->  00:00:00:00:00:0b  (aguardando confirmação...)
+[LEARN]         10.0.0.11  ->  00:00:00:00:00:0b  ✓
+[LEARN?]        10.0.0.12  ->  00:00:00:00:00:0c  (aguardando confirmação...)
+[LEARN]         10.0.0.12  ->  00:00:00:00:00:0c  ✓
+[LEARN]          10.0.0.2  ->  00:00:00:00:00:02  ✓
+[LEARN]          10.0.0.3  ->  00:00:00:00:00:03  ✓
+
+[INFO] Aprendizado concluído. 11 host(s) mapeado(s). Monitorando...
+
+                 10.0.0.1  ->  00:00:00:00:00:01
+                10.0.0.10  ->  00:00:00:00:00:0a
+                10.0.0.11  ->  00:00:00:00:00:0b
+                10.0.0.12  ->  00:00:00:00:00:0c
+                 10.0.0.2  ->  00:00:00:00:00:02
+                 10.0.0.3  ->  00:00:00:00:00:03
+                 10.0.0.4  ->  00:00:00:00:00:04
+                 10.0.0.5  ->  00:00:00:00:00:05
+                 10.0.0.6  ->  00:00:00:00:00:06
+                 10.0.0.7  ->  00:00:00:00:00:07
+                 10.0.0.8  ->  00:00:00:00:00:08
+
+[INFO] Origem dos ARPs no aprendizado: s1=182 s2=136 s3=136 sem-tag=85
+
+
+
+
+------------------------------------------------------------------------------
+ [s1 #5] Overhead COM detector ativo
+------------------------------------------------------------------------------
+  [com IDS] medição 1/3: latência=9.023 ms, banda=9.49 Mbps
+  [com IDS] medição 2/3: latência=8.99 ms, banda=9.53 Mbps
+  [com IDS] medição 3/3: latência=8.911 ms, banda=9.54 Mbps
+
+------------------------------------------------------------------------------
+ [s1 #5] Rodadas de ataque (hosts atacantes dedicados por rodada)
+------------------------------------------------------------------------------
+  Rodada 1/4: atacante=h8 (00:00:00:00:00:08)  arpspoof 10.0.0.1 <-> 10.0.0.2
+
+============================================================
+  ALERTA #1 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.2
+  MAC legítimo    : 00:00:00:00:00:02
+  MAC atacante    : 00:00:00:00:00:08  <-- FALSO
+  Bridge alvo     : s1
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:08 na bridge s1 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's1' para 00:00:00:00:00:08
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 2/4: atacante=h10 (00:00:00:00:00:0a)  arpspoof 10.0.0.4 <-> 10.0.0.5
+
+============================================================
+  ALERTA #2 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.5
+  MAC legítimo    : 00:00:00:00:00:05
+  MAC atacante    : 00:00:00:00:00:0a  <-- FALSO
+  Bridge alvo     : s1
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0a na bridge s1 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's1' para 00:00:00:00:00:0a
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 3/4: atacante=h11 (00:00:00:00:00:0b)  arpspoof 10.0.0.3 <-> 10.0.0.6
+
+============================================================
+  ALERTA #3 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0b  <-- FALSO
+  Bridge alvo     : s1
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0b na bridge s1 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's1' para 00:00:00:00:00:0b
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 4/4: atacante=h12 (00:00:00:00:00:0c)  arpspoof 10.0.0.1 <-> 10.0.0.6
+
+============================================================
+  ALERTA #4 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0c  <-- FALSO
+  Bridge alvo     : s1
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0c na bridge s1 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's1' para 00:00:00:00:00:0c
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+
+------------------------------------------------------------------------------
+ [s1 #5] Falso positivo — host reincidente (h3)
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+ [s1 #5] Host genuinamente novo pós-aprendizado (h9)
+------------------------------------------------------------------------------
+[NEW?]         10.0.0.9  ->  00:00:00:00:00:09  (host não aprendido, aguardando confirmação...)
+[NEW]  Host confirmado após o aprendizado: 10.0.0.9 -> 00:00:00:00:00:09
+[AVISO] Host não estava na fase de aprendizado — verifique se essa entrada era esperada.
+
+ 
+[PROGRESSO] 5/15 execuções concluídas em 18.9 min.
+
+==============================================================================
+ CENÁRIO s2 — EXECUÇÃO 1/5 (geral: 6/15)
+==============================================================================
+[TOPO] Criando rede com atacante (h8) ligado a s2...
+[TOPO] Espelho s1: s1-spn (push VLAN 101) -> s1-rx1 -> s1-eth3
+[TOPO] Espelho s2: s2-spn (push VLAN 102) -> s1-rx2 -> s1-eth3
+[TOPO] Espelho s3: s3-spn (push VLAN 103) -> s1-rx3 -> s1-eth3
+[TOPO] Espelho em s1: saída=s1-spn  monitorando=['s1-eth1', 's1-eth2', 's1-eth4']
+[TOPO] Espelho em s2: saída=s2-spn  monitorando=['s2-eth1', 's2-eth2', 's2-eth3', 's2-eth4', 's2-eth5', 's2-eth6', 's2-eth7', 's2-eth8']
+[TOPO] Espelho em s3: saída=s3-spn  monitorando=['s3-eth1', 's3-eth2', 's3-eth3', 's3-eth4']
+[TOPO] Testando conectividade inicial (warm-up de ARP, exceto h9)...
+
+------------------------------------------------------------------------------
+ [s2 #1] Overhead BASELINE (3x, 50 pacotes, 10s)
+------------------------------------------------------------------------------
+  [baseline] medição 1/3: latência=9.275 ms, banda=9.51 Mbps
+  [baseline] medição 2/3: latência=9.088 ms, banda=9.54 Mbps
+  [baseline] medição 3/3: latência=9.026 ms, banda=9.49 Mbps
+
+------------------------------------------------------------------------------
+ [s2 #1] Iniciando detector único (espelho de s1+s2+s3 via VLAN, aprendizado: 15s)
+------------------------------------------------------------------------------
+
+============================================================
+  ARP IDS — Detector Híbrido de ARP Spoofing
+============================================================
+  Ambiente   : MININET
+  Interfaces : h7-eth0
+  Mapa VLAN  : {101: 's1', 102: 's2', 103: 's3'}
+  Modo NAC   : ATIVO (bloqueio automático)
+  Método     : ovs-ofctl (bridge padrão: s1)
+  Aprendizado: 15s
+  Confirmação: 2 pacotes por IP/MAC
+  Debug      : inativo
+============================================================
+
+[INFO] Fase de aprendizado iniciada (15s)...
+[LEARN?]         10.0.0.1  ->  00:00:00:00:00:01  (aguardando confirmação...)
+[LEARN]          10.0.0.1  ->  00:00:00:00:00:01  ✓
+[LEARN?]         10.0.0.2  ->  00:00:00:00:00:02  (aguardando confirmação...)
+[LEARN?]         10.0.0.3  ->  00:00:00:00:00:03  (aguardando confirmação...)
+[LEARN?]         10.0.0.4  ->  00:00:00:00:00:04  (aguardando confirmação...)
+[LEARN]          10.0.0.4  ->  00:00:00:00:00:04  ✓
+[LEARN?]         10.0.0.5  ->  00:00:00:00:00:05  (aguardando confirmação...)
+[LEARN]          10.0.0.5  ->  00:00:00:00:00:05  ✓
+[LEARN?]         10.0.0.6  ->  00:00:00:00:00:06  (aguardando confirmação...)
+[LEARN]          10.0.0.6  ->  00:00:00:00:00:06  ✓
+[LEARN?]         10.0.0.7  ->  00:00:00:00:00:07  (aguardando confirmação...)
+[LEARN]          10.0.0.7  ->  00:00:00:00:00:07  ✓
+[LEARN?]         10.0.0.8  ->  00:00:00:00:00:08  (aguardando confirmação...)
+[LEARN?]        10.0.0.10  ->  00:00:00:00:00:0a  (aguardando confirmação...)
+[LEARN?]        10.0.0.11  ->  00:00:00:00:00:0b  (aguardando confirmação...)
+[LEARN?]        10.0.0.12  ->  00:00:00:00:00:0c  (aguardando confirmação...)
+[LEARN]          10.0.0.2  ->  00:00:00:00:00:02  ✓
+[LEARN]          10.0.0.3  ->  00:00:00:00:00:03  ✓
+[LEARN]          10.0.0.8  ->  00:00:00:00:00:08  ✓
+[LEARN]         10.0.0.10  ->  00:00:00:00:00:0a  ✓
+[LEARN]         10.0.0.11  ->  00:00:00:00:00:0b  ✓
+[LEARN]         10.0.0.12  ->  00:00:00:00:00:0c  ✓
+
+[INFO] Aprendizado concluído. 11 host(s) mapeado(s). Monitorando...
+
+                 10.0.0.1  ->  00:00:00:00:00:01
+                10.0.0.10  ->  00:00:00:00:00:0a
+                10.0.0.11  ->  00:00:00:00:00:0b
+                10.0.0.12  ->  00:00:00:00:00:0c
+                 10.0.0.2  ->  00:00:00:00:00:02
+                 10.0.0.3  ->  00:00:00:00:00:03
+                 10.0.0.4  ->  00:00:00:00:00:04
+                 10.0.0.5  ->  00:00:00:00:00:05
+                 10.0.0.6  ->  00:00:00:00:00:06
+                 10.0.0.7  ->  00:00:00:00:00:07
+                 10.0.0.8  ->  00:00:00:00:00:08
+
+[INFO] Origem dos ARPs no aprendizado: s1=128 s2=202 s3=136 sem-tag=85
+
+
+
+------------------------------------------------------------------------------
+ [s2 #1] Overhead COM detector ativo
+------------------------------------------------------------------------------
+  [com IDS] medição 1/3: latência=9.409 ms, banda=9.42 Mbps
+  [com IDS] medição 2/3: latência=9.321 ms, banda=9.48 Mbps
+  [com IDS] medição 3/3: latência=9.223 ms, banda=9.53 Mbps
+
+------------------------------------------------------------------------------
+ [s2 #1] Rodadas de ataque (hosts atacantes dedicados por rodada)
+------------------------------------------------------------------------------
+  Rodada 1/4: atacante=h8 (00:00:00:00:00:08)  arpspoof 10.0.0.1 <-> 10.0.0.2
+
+============================================================
+  ALERTA #1 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.2
+  MAC legítimo    : 00:00:00:00:00:02
+  MAC atacante    : 00:00:00:00:00:08  <-- FALSO
+  Bridge alvo     : s2
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:08 na bridge s2 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's2' para 00:00:00:00:00:08
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 2/4: atacante=h10 (00:00:00:00:00:0a)  arpspoof 10.0.0.4 <-> 10.0.0.5
+
+============================================================
+  ALERTA #2 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.5
+  MAC legítimo    : 00:00:00:00:00:05
+  MAC atacante    : 00:00:00:00:00:0a  <-- FALSO
+  Bridge alvo     : s2
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0a na bridge s2 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's2' para 00:00:00:00:00:0a
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 3/4: atacante=h11 (00:00:00:00:00:0b)  arpspoof 10.0.0.3 <-> 10.0.0.6
+
+============================================================
+  ALERTA #3 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0b  <-- FALSO
+  Bridge alvo     : s2
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0b na bridge s2 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's2' para 00:00:00:00:00:0b
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 4/4: atacante=h12 (00:00:00:00:00:0c)  arpspoof 10.0.0.1 <-> 10.0.0.6
+
+============================================================
+  ALERTA #4 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0c  <-- FALSO
+  Bridge alvo     : s2
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0c na bridge s2 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's2' para 00:00:00:00:00:0c
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+
+------------------------------------------------------------------------------
+ [s2 #1] Falso positivo — host reincidente (h3)
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+ [s2 #1] Host genuinamente novo pós-aprendizado (h9)
+------------------------------------------------------------------------------
+[NEW?]         10.0.0.9  ->  00:00:00:00:00:09  (host não aprendido, aguardando confirmação...)
+[NEW]  Host confirmado após o aprendizado: 10.0.0.9 -> 00:00:00:00:00:09
+[AVISO] Host não estava na fase de aprendizado — verifique se essa entrada era esperada.
+
+ 
+[PROGRESSO] 6/15 execuções concluídas em 22.6 min.
+
+==============================================================================
+ CENÁRIO s2 — EXECUÇÃO 2/5 (geral: 7/15)
+==============================================================================
+[TOPO] Criando rede com atacante (h8) ligado a s2...
+[TOPO] Espelho s1: s1-spn (push VLAN 101) -> s1-rx1 -> s1-eth3
+[TOPO] Espelho s2: s2-spn (push VLAN 102) -> s1-rx2 -> s1-eth3
+[TOPO] Espelho s3: s3-spn (push VLAN 103) -> s1-rx3 -> s1-eth3
+[TOPO] Espelho em s1: saída=s1-spn  monitorando=['s1-eth1', 's1-eth2', 's1-eth4']
+[TOPO] Espelho em s2: saída=s2-spn  monitorando=['s2-eth1', 's2-eth2', 's2-eth3', 's2-eth4', 's2-eth5', 's2-eth6', 's2-eth7', 's2-eth8']
+[TOPO] Espelho em s3: saída=s3-spn  monitorando=['s3-eth1', 's3-eth2', 's3-eth3', 's3-eth4']
+[TOPO] Testando conectividade inicial (warm-up de ARP, exceto h9)...
+
+------------------------------------------------------------------------------
+ [s2 #2] Overhead BASELINE (3x, 50 pacotes, 10s)
+------------------------------------------------------------------------------
+  [baseline] medição 1/3: latência=9.283 ms, banda=9.51 Mbps
+  [baseline] medição 2/3: latência=9.082 ms, banda=9.53 Mbps
+  [baseline] medição 3/3: latência=9.327 ms, banda=9.54 Mbps
+
+------------------------------------------------------------------------------
+ [s2 #2] Iniciando detector único (espelho de s1+s2+s3 via VLAN, aprendizado: 15s)
+------------------------------------------------------------------------------
+
+============================================================
+  ARP IDS — Detector Híbrido de ARP Spoofing
+============================================================
+  Ambiente   : MININET
+  Interfaces : h7-eth0
+  Mapa VLAN  : {101: 's1', 102: 's2', 103: 's3'}
+  Modo NAC   : ATIVO (bloqueio automático)
+  Método     : ovs-ofctl (bridge padrão: s1)
+  Aprendizado: 15s
+  Confirmação: 2 pacotes por IP/MAC
+  Debug      : inativo
+============================================================
+
+[INFO] Fase de aprendizado iniciada (15s)...
+[LEARN?]         10.0.0.1  ->  00:00:00:00:00:01  (aguardando confirmação...)
+[LEARN]          10.0.0.1  ->  00:00:00:00:00:01  ✓
+[LEARN?]         10.0.0.2  ->  00:00:00:00:00:02  (aguardando confirmação...)
+[LEARN?]         10.0.0.3  ->  00:00:00:00:00:03  (aguardando confirmação...)
+[LEARN?]         10.0.0.4  ->  00:00:00:00:00:04  (aguardando confirmação...)
+[LEARN]          10.0.0.4  ->  00:00:00:00:00:04  ✓
+[LEARN?]         10.0.0.5  ->  00:00:00:00:00:05  (aguardando confirmação...)
+[LEARN]          10.0.0.5  ->  00:00:00:00:00:05  ✓
+[LEARN?]         10.0.0.6  ->  00:00:00:00:00:06  (aguardando confirmação...)
+[LEARN]          10.0.0.6  ->  00:00:00:00:00:06  ✓
+[LEARN?]         10.0.0.7  ->  00:00:00:00:00:07  (aguardando confirmação...)
+[LEARN]          10.0.0.7  ->  00:00:00:00:00:07  ✓
+[LEARN?]         10.0.0.8  ->  00:00:00:00:00:08  (aguardando confirmação...)
+[LEARN?]        10.0.0.10  ->  00:00:00:00:00:0a  (aguardando confirmação...)
+[LEARN?]        10.0.0.11  ->  00:00:00:00:00:0b  (aguardando confirmação...)
+[LEARN?]        10.0.0.12  ->  00:00:00:00:00:0c  (aguardando confirmação...)
+[LEARN]          10.0.0.2  ->  00:00:00:00:00:02  ✓
+[LEARN]          10.0.0.3  ->  00:00:00:00:00:03  ✓
+[LEARN]          10.0.0.8  ->  00:00:00:00:00:08  ✓
+[LEARN]         10.0.0.10  ->  00:00:00:00:00:0a  ✓
+[LEARN]         10.0.0.11  ->  00:00:00:00:00:0b  ✓
+[LEARN]         10.0.0.12  ->  00:00:00:00:00:0c  ✓
+
+[INFO] Aprendizado concluído. 11 host(s) mapeado(s). Monitorando...
+
+                 10.0.0.1  ->  00:00:00:00:00:01
+                10.0.0.10  ->  00:00:00:00:00:0a
+                10.0.0.11  ->  00:00:00:00:00:0b
+                10.0.0.12  ->  00:00:00:00:00:0c
+                 10.0.0.2  ->  00:00:00:00:00:02
+                 10.0.0.3  ->  00:00:00:00:00:03
+                 10.0.0.4  ->  00:00:00:00:00:04
+                 10.0.0.5  ->  00:00:00:00:00:05
+                 10.0.0.6  ->  00:00:00:00:00:06
+                 10.0.0.7  ->  00:00:00:00:00:07
+                 10.0.0.8  ->  00:00:00:00:00:08
+
+[INFO] Origem dos ARPs no aprendizado: s1=128 s2=202 s3=136 sem-tag=85
+
+
+
+------------------------------------------------------------------------------
+ [s2 #2] Overhead COM detector ativo
+------------------------------------------------------------------------------
+  [com IDS] medição 1/3: latência=9.627 ms, banda=9.55 Mbps
+  [com IDS] medição 2/3: latência=9.236 ms, banda=9.56 Mbps
+  [com IDS] medição 3/3: latência=8.917 ms, banda=9.49 Mbps
+
+------------------------------------------------------------------------------
+ [s2 #2] Rodadas de ataque (hosts atacantes dedicados por rodada)
+------------------------------------------------------------------------------
+  Rodada 1/4: atacante=h8 (00:00:00:00:00:08)  arpspoof 10.0.0.1 <-> 10.0.0.2
+
+============================================================
+  ALERTA #1 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.2
+  MAC legítimo    : 00:00:00:00:00:02
+  MAC atacante    : 00:00:00:00:00:08  <-- FALSO
+  Bridge alvo     : s2
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:08 na bridge s2 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's2' para 00:00:00:00:00:08
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 2/4: atacante=h10 (00:00:00:00:00:0a)  arpspoof 10.0.0.4 <-> 10.0.0.5
+
+============================================================
+  ALERTA #2 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.5
+  MAC legítimo    : 00:00:00:00:00:05
+  MAC atacante    : 00:00:00:00:00:0a  <-- FALSO
+  Bridge alvo     : s2
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0a na bridge s2 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's2' para 00:00:00:00:00:0a
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 3/4: atacante=h11 (00:00:00:00:00:0b)  arpspoof 10.0.0.3 <-> 10.0.0.6
+
+============================================================
+  ALERTA #3 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0b  <-- FALSO
+  Bridge alvo     : s2
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0b na bridge s2 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's2' para 00:00:00:00:00:0b
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 4/4: atacante=h12 (00:00:00:00:00:0c)  arpspoof 10.0.0.1 <-> 10.0.0.6
+
+============================================================
+  ALERTA #4 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0c  <-- FALSO
+  Bridge alvo     : s2
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0c na bridge s2 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's2' para 00:00:00:00:00:0c
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+
+------------------------------------------------------------------------------
+ [s2 #2] Falso positivo — host reincidente (h3)
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+ [s2 #2] Host genuinamente novo pós-aprendizado (h9)
+------------------------------------------------------------------------------
+[NEW?]         10.0.0.9  ->  00:00:00:00:00:09  (host não aprendido, aguardando confirmação...)
+[NEW]  Host confirmado após o aprendizado: 10.0.0.9 -> 00:00:00:00:00:09
+[AVISO] Host não estava na fase de aprendizado — verifique se essa entrada era esperada.
+
+ 
+[PROGRESSO] 7/15 execuções concluídas em 26.3 min.
+
+==============================================================================
+ CENÁRIO s2 — EXECUÇÃO 3/5 (geral: 8/15)
+==============================================================================
+[TOPO] Criando rede com atacante (h8) ligado a s2...
+[TOPO] Espelho s1: s1-spn (push VLAN 101) -> s1-rx1 -> s1-eth3
+[TOPO] Espelho s2: s2-spn (push VLAN 102) -> s1-rx2 -> s1-eth3
+[TOPO] Espelho s3: s3-spn (push VLAN 103) -> s1-rx3 -> s1-eth3
+[TOPO] Espelho em s1: saída=s1-spn  monitorando=['s1-eth1', 's1-eth2', 's1-eth4']
+[TOPO] Espelho em s2: saída=s2-spn  monitorando=['s2-eth1', 's2-eth2', 's2-eth3', 's2-eth4', 's2-eth5', 's2-eth6', 's2-eth7', 's2-eth8']
+[TOPO] Espelho em s3: saída=s3-spn  monitorando=['s3-eth1', 's3-eth2', 's3-eth3', 's3-eth4']
+[TOPO] Testando conectividade inicial (warm-up de ARP, exceto h9)...
+
+------------------------------------------------------------------------------
+ [s2 #3] Overhead BASELINE (3x, 50 pacotes, 10s)
+------------------------------------------------------------------------------
+  [baseline] medição 1/3: latência=9.432 ms, banda=9.49 Mbps
+  [baseline] medição 2/3: latência=9.284 ms, banda=9.53 Mbps
+  [baseline] medição 3/3: latência=8.98 ms, banda=9.55 Mbps
+
+------------------------------------------------------------------------------
+ [s2 #3] Iniciando detector único (espelho de s1+s2+s3 via VLAN, aprendizado: 15s)
+------------------------------------------------------------------------------
+
+============================================================
+  ARP IDS — Detector Híbrido de ARP Spoofing
+============================================================
+  Ambiente   : MININET
+  Interfaces : h7-eth0
+  Mapa VLAN  : {101: 's1', 102: 's2', 103: 's3'}
+  Modo NAC   : ATIVO (bloqueio automático)
+  Método     : ovs-ofctl (bridge padrão: s1)
+  Aprendizado: 15s
+  Confirmação: 2 pacotes por IP/MAC
+  Debug      : inativo
+============================================================
+
+[INFO] Fase de aprendizado iniciada (15s)...
+[LEARN?]         10.0.0.1  ->  00:00:00:00:00:01  (aguardando confirmação...)
+[LEARN]          10.0.0.1  ->  00:00:00:00:00:01  ✓
+[LEARN?]         10.0.0.2  ->  00:00:00:00:00:02  (aguardando confirmação...)
+[LEARN?]         10.0.0.3  ->  00:00:00:00:00:03  (aguardando confirmação...)
+[LEARN?]         10.0.0.4  ->  00:00:00:00:00:04  (aguardando confirmação...)
+[LEARN]          10.0.0.4  ->  00:00:00:00:00:04  ✓
+[LEARN?]         10.0.0.5  ->  00:00:00:00:00:05  (aguardando confirmação...)
+[LEARN]          10.0.0.5  ->  00:00:00:00:00:05  ✓
+[LEARN?]         10.0.0.6  ->  00:00:00:00:00:06  (aguardando confirmação...)
+[LEARN]          10.0.0.6  ->  00:00:00:00:00:06  ✓
+[LEARN?]         10.0.0.7  ->  00:00:00:00:00:07  (aguardando confirmação...)
+[LEARN]          10.0.0.7  ->  00:00:00:00:00:07  ✓
+[LEARN?]         10.0.0.8  ->  00:00:00:00:00:08  (aguardando confirmação...)
+[LEARN?]        10.0.0.10  ->  00:00:00:00:00:0a  (aguardando confirmação...)
+[LEARN?]        10.0.0.11  ->  00:00:00:00:00:0b  (aguardando confirmação...)
+[LEARN?]        10.0.0.12  ->  00:00:00:00:00:0c  (aguardando confirmação...)
+[LEARN]          10.0.0.2  ->  00:00:00:00:00:02  ✓
+[LEARN]          10.0.0.3  ->  00:00:00:00:00:03  ✓
+[LEARN]          10.0.0.8  ->  00:00:00:00:00:08  ✓
+[LEARN]         10.0.0.10  ->  00:00:00:00:00:0a  ✓
+[LEARN]         10.0.0.11  ->  00:00:00:00:00:0b  ✓
+[LEARN]         10.0.0.12  ->  00:00:00:00:00:0c  ✓
+
+[INFO] Aprendizado concluído. 11 host(s) mapeado(s). Monitorando...
+
+                 10.0.0.1  ->  00:00:00:00:00:01
+                10.0.0.10  ->  00:00:00:00:00:0a
+                10.0.0.11  ->  00:00:00:00:00:0b
+                10.0.0.12  ->  00:00:00:00:00:0c
+                 10.0.0.2  ->  00:00:00:00:00:02
+                 10.0.0.3  ->  00:00:00:00:00:03
+                 10.0.0.4  ->  00:00:00:00:00:04
+                 10.0.0.5  ->  00:00:00:00:00:05
+                 10.0.0.6  ->  00:00:00:00:00:06
+                 10.0.0.7  ->  00:00:00:00:00:07
+                 10.0.0.8  ->  00:00:00:00:00:08
+
+[INFO] Origem dos ARPs no aprendizado: s1=128 s2=202 s3=136 sem-tag=85
+
+
+
+
+------------------------------------------------------------------------------
+ [s2 #3] Overhead COM detector ativo
+------------------------------------------------------------------------------
+  [com IDS] medição 1/3: latência=8.847 ms, banda=9.35 Mbps
+  [com IDS] medição 2/3: latência=8.642 ms, banda=9.52 Mbps
+  [com IDS] medição 3/3: latência=8.823 ms, banda=9.53 Mbps
+
+------------------------------------------------------------------------------
+ [s2 #3] Rodadas de ataque (hosts atacantes dedicados por rodada)
+------------------------------------------------------------------------------
+  Rodada 1/4: atacante=h8 (00:00:00:00:00:08)  arpspoof 10.0.0.1 <-> 10.0.0.2
+
+============================================================
+  ALERTA #1 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.2
+  MAC legítimo    : 00:00:00:00:00:02
+  MAC atacante    : 00:00:00:00:00:08  <-- FALSO
+  Bridge alvo     : s2
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:08 na bridge s2 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's2' para 00:00:00:00:00:08
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 2/4: atacante=h10 (00:00:00:00:00:0a)  arpspoof 10.0.0.4 <-> 10.0.0.5
+
+============================================================
+  ALERTA #2 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.5
+  MAC legítimo    : 00:00:00:00:00:05
+  MAC atacante    : 00:00:00:00:00:0a  <-- FALSO
+  Bridge alvo     : s2
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0a na bridge s2 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's2' para 00:00:00:00:00:0a
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 3/4: atacante=h11 (00:00:00:00:00:0b)  arpspoof 10.0.0.3 <-> 10.0.0.6
+
+============================================================
+  ALERTA #3 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0b  <-- FALSO
+  Bridge alvo     : s2
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0b na bridge s2 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's2' para 00:00:00:00:00:0b
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 4/4: atacante=h12 (00:00:00:00:00:0c)  arpspoof 10.0.0.1 <-> 10.0.0.6
+
+============================================================
+  ALERTA #4 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0c  <-- FALSO
+  Bridge alvo     : s2
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0c na bridge s2 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's2' para 00:00:00:00:00:0c
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+
+------------------------------------------------------------------------------
+ [s2 #3] Falso positivo — host reincidente (h3)
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+ [s2 #3] Host genuinamente novo pós-aprendizado (h9)
+------------------------------------------------------------------------------
+[NEW?]         10.0.0.9  ->  00:00:00:00:00:09  (host não aprendido, aguardando confirmação...)
+[NEW]  Host confirmado após o aprendizado: 10.0.0.9 -> 00:00:00:00:00:09
+[AVISO] Host não estava na fase de aprendizado — verifique se essa entrada era esperada.
+
+ 
+[PROGRESSO] 8/15 execuções concluídas em 30.0 min.
+
+==============================================================================
+ CENÁRIO s2 — EXECUÇÃO 4/5 (geral: 9/15)
+==============================================================================
+[TOPO] Criando rede com atacante (h8) ligado a s2...
+[TOPO] Espelho s1: s1-spn (push VLAN 101) -> s1-rx1 -> s1-eth3
+[TOPO] Espelho s2: s2-spn (push VLAN 102) -> s1-rx2 -> s1-eth3
+[TOPO] Espelho s3: s3-spn (push VLAN 103) -> s1-rx3 -> s1-eth3
+[TOPO] Espelho em s1: saída=s1-spn  monitorando=['s1-eth1', 's1-eth2', 's1-eth4']
+[TOPO] Espelho em s2: saída=s2-spn  monitorando=['s2-eth1', 's2-eth2', 's2-eth3', 's2-eth4', 's2-eth5', 's2-eth6', 's2-eth7', 's2-eth8']
+[TOPO] Espelho em s3: saída=s3-spn  monitorando=['s3-eth1', 's3-eth2', 's3-eth3', 's3-eth4']
+[TOPO] Testando conectividade inicial (warm-up de ARP, exceto h9)...
+
+------------------------------------------------------------------------------
+ [s2 #4] Overhead BASELINE (3x, 50 pacotes, 10s)
+------------------------------------------------------------------------------
+  [baseline] medição 1/3: latência=8.84 ms, banda=9.54 Mbps
+  [baseline] medição 2/3: latência=8.819 ms, banda=9.55 Mbps
+  [baseline] medição 3/3: latência=8.641 ms, banda=9.48 Mbps
+
+------------------------------------------------------------------------------
+ [s2 #4] Iniciando detector único (espelho de s1+s2+s3 via VLAN, aprendizado: 15s)
+------------------------------------------------------------------------------
+
+============================================================
+  ARP IDS — Detector Híbrido de ARP Spoofing
+============================================================
+  Ambiente   : MININET
+  Interfaces : h7-eth0
+  Mapa VLAN  : {101: 's1', 102: 's2', 103: 's3'}
+  Modo NAC   : ATIVO (bloqueio automático)
+  Método     : ovs-ofctl (bridge padrão: s1)
+  Aprendizado: 15s
+  Confirmação: 2 pacotes por IP/MAC
+  Debug      : inativo
+============================================================
+
+[INFO] Fase de aprendizado iniciada (15s)...
+[LEARN?]         10.0.0.1  ->  00:00:00:00:00:01  (aguardando confirmação...)
+[LEARN]          10.0.0.1  ->  00:00:00:00:00:01  ✓
+[LEARN?]         10.0.0.2  ->  00:00:00:00:00:02  (aguardando confirmação...)
+[LEARN?]         10.0.0.3  ->  00:00:00:00:00:03  (aguardando confirmação...)
+[LEARN?]         10.0.0.4  ->  00:00:00:00:00:04  (aguardando confirmação...)
+[LEARN]          10.0.0.4  ->  00:00:00:00:00:04  ✓
+[LEARN?]         10.0.0.5  ->  00:00:00:00:00:05  (aguardando confirmação...)
+[LEARN]          10.0.0.5  ->  00:00:00:00:00:05  ✓
+[LEARN?]         10.0.0.6  ->  00:00:00:00:00:06  (aguardando confirmação...)
+[LEARN]          10.0.0.6  ->  00:00:00:00:00:06  ✓
+[LEARN?]         10.0.0.7  ->  00:00:00:00:00:07  (aguardando confirmação...)
+[LEARN]          10.0.0.7  ->  00:00:00:00:00:07  ✓
+[LEARN?]         10.0.0.8  ->  00:00:00:00:00:08  (aguardando confirmação...)
+[LEARN?]        10.0.0.10  ->  00:00:00:00:00:0a  (aguardando confirmação...)
+[LEARN?]        10.0.0.11  ->  00:00:00:00:00:0b  (aguardando confirmação...)
+[LEARN?]        10.0.0.12  ->  00:00:00:00:00:0c  (aguardando confirmação...)
+[LEARN]          10.0.0.2  ->  00:00:00:00:00:02  ✓
+[LEARN]          10.0.0.3  ->  00:00:00:00:00:03  ✓
+[LEARN]          10.0.0.8  ->  00:00:00:00:00:08  ✓
+[LEARN]         10.0.0.10  ->  00:00:00:00:00:0a  ✓
+[LEARN]         10.0.0.11  ->  00:00:00:00:00:0b  ✓
+[LEARN]         10.0.0.12  ->  00:00:00:00:00:0c  ✓
+
+[INFO] Aprendizado concluído. 11 host(s) mapeado(s). Monitorando...
+
+                 10.0.0.1  ->  00:00:00:00:00:01
+                10.0.0.10  ->  00:00:00:00:00:0a
+                10.0.0.11  ->  00:00:00:00:00:0b
+                10.0.0.12  ->  00:00:00:00:00:0c
+                 10.0.0.2  ->  00:00:00:00:00:02
+                 10.0.0.3  ->  00:00:00:00:00:03
+                 10.0.0.4  ->  00:00:00:00:00:04
+                 10.0.0.5  ->  00:00:00:00:00:05
+                 10.0.0.6  ->  00:00:00:00:00:06
+                 10.0.0.7  ->  00:00:00:00:00:07
+                 10.0.0.8  ->  00:00:00:00:00:08
+
+[INFO] Origem dos ARPs no aprendizado: s1=128 s2=202 s3=136 sem-tag=85
+
+
+
+
+------------------------------------------------------------------------------
+ [s2 #4] Overhead COM detector ativo
+------------------------------------------------------------------------------
+  [com IDS] medição 1/3: latência=8.8 ms, banda=9.54 Mbps
+  [com IDS] medição 2/3: latência=8.95 ms, banda=9.49 Mbps
+  [com IDS] medição 3/3: latência=8.648 ms, banda=9.52 Mbps
+
+------------------------------------------------------------------------------
+ [s2 #4] Rodadas de ataque (hosts atacantes dedicados por rodada)
+------------------------------------------------------------------------------
+  Rodada 1/4: atacante=h8 (00:00:00:00:00:08)  arpspoof 10.0.0.1 <-> 10.0.0.2
+
+============================================================
+  ALERTA #1 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.2
+  MAC legítimo    : 00:00:00:00:00:02
+  MAC atacante    : 00:00:00:00:00:08  <-- FALSO
+  Bridge alvo     : s2
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:08 na bridge s2 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's2' para 00:00:00:00:00:08
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 2/4: atacante=h10 (00:00:00:00:00:0a)  arpspoof 10.0.0.4 <-> 10.0.0.5
+
+============================================================
+  ALERTA #2 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.5
+  MAC legítimo    : 00:00:00:00:00:05
+  MAC atacante    : 00:00:00:00:00:0a  <-- FALSO
+  Bridge alvo     : s2
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0a na bridge s2 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's2' para 00:00:00:00:00:0a
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 3/4: atacante=h11 (00:00:00:00:00:0b)  arpspoof 10.0.0.3 <-> 10.0.0.6
+
+============================================================
+  ALERTA #3 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0b  <-- FALSO
+  Bridge alvo     : s2
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0b na bridge s2 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's2' para 00:00:00:00:00:0b
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 4/4: atacante=h12 (00:00:00:00:00:0c)  arpspoof 10.0.0.1 <-> 10.0.0.6
+
+============================================================
+  ALERTA #4 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0c  <-- FALSO
+  Bridge alvo     : s2
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0c na bridge s2 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's2' para 00:00:00:00:00:0c
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+
+------------------------------------------------------------------------------
+ [s2 #4] Falso positivo — host reincidente (h3)
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+ [s2 #4] Host genuinamente novo pós-aprendizado (h9)
+------------------------------------------------------------------------------
+[NEW?]         10.0.0.9  ->  00:00:00:00:00:09  (host não aprendido, aguardando confirmação...)
+[NEW]  Host confirmado após o aprendizado: 10.0.0.9 -> 00:00:00:00:00:09
+[AVISO] Host não estava na fase de aprendizado — verifique se essa entrada era esperada.
+
+ 
+[PROGRESSO] 9/15 execuções concluídas em 33.7 min.
+
+==============================================================================
+ CENÁRIO s2 — EXECUÇÃO 5/5 (geral: 10/15)
+==============================================================================
+[TOPO] Criando rede com atacante (h8) ligado a s2...
+[TOPO] Espelho s1: s1-spn (push VLAN 101) -> s1-rx1 -> s1-eth3
+[TOPO] Espelho s2: s2-spn (push VLAN 102) -> s1-rx2 -> s1-eth3
+[TOPO] Espelho s3: s3-spn (push VLAN 103) -> s1-rx3 -> s1-eth3
+[TOPO] Espelho em s1: saída=s1-spn  monitorando=['s1-eth1', 's1-eth2', 's1-eth4']
+[TOPO] Espelho em s2: saída=s2-spn  monitorando=['s2-eth1', 's2-eth2', 's2-eth3', 's2-eth4', 's2-eth5', 's2-eth6', 's2-eth7', 's2-eth8']
+[TOPO] Espelho em s3: saída=s3-spn  monitorando=['s3-eth1', 's3-eth2', 's3-eth3', 's3-eth4']
+[TOPO] Testando conectividade inicial (warm-up de ARP, exceto h9)...
+
+------------------------------------------------------------------------------
+ [s2 #5] Overhead BASELINE (3x, 50 pacotes, 10s)
+------------------------------------------------------------------------------
+  [baseline] medição 1/3: latência=8.681 ms, banda=9.47 Mbps
+  [baseline] medição 2/3: latência=8.912 ms, banda=9.54 Mbps
+  [baseline] medição 3/3: latência=8.729 ms, banda=9.55 Mbps
+
+------------------------------------------------------------------------------
+ [s2 #5] Iniciando detector único (espelho de s1+s2+s3 via VLAN, aprendizado: 15s)
+------------------------------------------------------------------------------
+
+============================================================
+  ARP IDS — Detector Híbrido de ARP Spoofing
+============================================================
+  Ambiente   : MININET
+  Interfaces : h7-eth0
+  Mapa VLAN  : {101: 's1', 102: 's2', 103: 's3'}
+  Modo NAC   : ATIVO (bloqueio automático)
+  Método     : ovs-ofctl (bridge padrão: s1)
+  Aprendizado: 15s
+  Confirmação: 2 pacotes por IP/MAC
+  Debug      : inativo
+============================================================
+
+[INFO] Fase de aprendizado iniciada (15s)...
+[LEARN?]         10.0.0.1  ->  00:00:00:00:00:01  (aguardando confirmação...)
+[LEARN]          10.0.0.1  ->  00:00:00:00:00:01  ✓
+[LEARN?]         10.0.0.2  ->  00:00:00:00:00:02  (aguardando confirmação...)
+[LEARN?]         10.0.0.3  ->  00:00:00:00:00:03  (aguardando confirmação...)
+[LEARN?]         10.0.0.4  ->  00:00:00:00:00:04  (aguardando confirmação...)
+[LEARN]          10.0.0.4  ->  00:00:00:00:00:04  ✓
+[LEARN?]         10.0.0.5  ->  00:00:00:00:00:05  (aguardando confirmação...)
+[LEARN]          10.0.0.5  ->  00:00:00:00:00:05  ✓
+[LEARN?]         10.0.0.6  ->  00:00:00:00:00:06  (aguardando confirmação...)
+[LEARN]          10.0.0.6  ->  00:00:00:00:00:06  ✓
+[LEARN?]         10.0.0.7  ->  00:00:00:00:00:07  (aguardando confirmação...)
+[LEARN]          10.0.0.7  ->  00:00:00:00:00:07  ✓
+[LEARN?]         10.0.0.8  ->  00:00:00:00:00:08  (aguardando confirmação...)
+[LEARN?]        10.0.0.10  ->  00:00:00:00:00:0a  (aguardando confirmação...)
+[LEARN?]        10.0.0.11  ->  00:00:00:00:00:0b  (aguardando confirmação...)
+[LEARN?]        10.0.0.12  ->  00:00:00:00:00:0c  (aguardando confirmação...)
+[LEARN]          10.0.0.2  ->  00:00:00:00:00:02  ✓
+[LEARN]          10.0.0.3  ->  00:00:00:00:00:03  ✓
+[LEARN]          10.0.0.8  ->  00:00:00:00:00:08  ✓
+[LEARN]         10.0.0.10  ->  00:00:00:00:00:0a  ✓
+[LEARN]         10.0.0.11  ->  00:00:00:00:00:0b  ✓
+[LEARN]         10.0.0.12  ->  00:00:00:00:00:0c  ✓
+
+[INFO] Aprendizado concluído. 11 host(s) mapeado(s). Monitorando...
+
+                 10.0.0.1  ->  00:00:00:00:00:01
+                10.0.0.10  ->  00:00:00:00:00:0a
+                10.0.0.11  ->  00:00:00:00:00:0b
+                10.0.0.12  ->  00:00:00:00:00:0c
+                 10.0.0.2  ->  00:00:00:00:00:02
+                 10.0.0.3  ->  00:00:00:00:00:03
+                 10.0.0.4  ->  00:00:00:00:00:04
+                 10.0.0.5  ->  00:00:00:00:00:05
+                 10.0.0.6  ->  00:00:00:00:00:06
+                 10.0.0.7  ->  00:00:00:00:00:07
+                 10.0.0.8  ->  00:00:00:00:00:08
+
+[INFO] Origem dos ARPs no aprendizado: s1=128 s2=202 s3=136 sem-tag=85
+
+
+
+
+------------------------------------------------------------------------------
+ [s2 #5] Overhead COM detector ativo
+------------------------------------------------------------------------------
+  [com IDS] medição 1/3: latência=8.967 ms, banda=9.54 Mbps
+  [com IDS] medição 2/3: latência=8.951 ms, banda=9.55 Mbps
+  [com IDS] medição 3/3: latência=8.803 ms, banda=9.47 Mbps
+
+------------------------------------------------------------------------------
+ [s2 #5] Rodadas de ataque (hosts atacantes dedicados por rodada)
+------------------------------------------------------------------------------
+  Rodada 1/4: atacante=h8 (00:00:00:00:00:08)  arpspoof 10.0.0.1 <-> 10.0.0.2
+
+============================================================
+  ALERTA #1 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.2
+  MAC legítimo    : 00:00:00:00:00:02
+  MAC atacante    : 00:00:00:00:00:08  <-- FALSO
+  Bridge alvo     : s2
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:08 na bridge s2 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's2' para 00:00:00:00:00:08
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 2/4: atacante=h10 (00:00:00:00:00:0a)  arpspoof 10.0.0.4 <-> 10.0.0.5
+
+============================================================
+  ALERTA #2 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.5
+  MAC legítimo    : 00:00:00:00:00:05
+  MAC atacante    : 00:00:00:00:00:0a  <-- FALSO
+  Bridge alvo     : s2
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0a na bridge s2 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's2' para 00:00:00:00:00:0a
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 3/4: atacante=h11 (00:00:00:00:00:0b)  arpspoof 10.0.0.3 <-> 10.0.0.6
+
+============================================================
+  ALERTA #3 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0b  <-- FALSO
+  Bridge alvo     : s2
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0b na bridge s2 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's2' para 00:00:00:00:00:0b
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 4/4: atacante=h12 (00:00:00:00:00:0c)  arpspoof 10.0.0.1 <-> 10.0.0.6
+
+============================================================
+  ALERTA #4 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0c  <-- FALSO
+  Bridge alvo     : s2
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0c na bridge s2 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's2' para 00:00:00:00:00:0c
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+
+------------------------------------------------------------------------------
+ [s2 #5] Falso positivo — host reincidente (h3)
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+ [s2 #5] Host genuinamente novo pós-aprendizado (h9)
+------------------------------------------------------------------------------
+[NEW?]         10.0.0.9  ->  00:00:00:00:00:09  (host não aprendido, aguardando confirmação...)
+[NEW]  Host confirmado após o aprendizado: 10.0.0.9 -> 00:00:00:00:00:09
+[AVISO] Host não estava na fase de aprendizado — verifique se essa entrada era esperada.
+
+ 
+[PROGRESSO] 10/15 execuções concluídas em 37.3 min.
+
+==============================================================================
+ CENÁRIO s3 — EXECUÇÃO 1/5 (geral: 11/15)
+==============================================================================
+[TOPO] Criando rede com atacante (h8) ligado a s3...
+[TOPO] Espelho s1: s1-spn (push VLAN 101) -> s1-rx1 -> s1-eth3
+[TOPO] Espelho s2: s2-spn (push VLAN 102) -> s1-rx2 -> s1-eth3
+[TOPO] Espelho s3: s3-spn (push VLAN 103) -> s1-rx3 -> s1-eth3
+[TOPO] Espelho em s1: saída=s1-spn  monitorando=['s1-eth1', 's1-eth2', 's1-eth4']
+[TOPO] Espelho em s2: saída=s2-spn  monitorando=['s2-eth1', 's2-eth2', 's2-eth3', 's2-eth4']
+[TOPO] Espelho em s3: saída=s3-spn  monitorando=['s3-eth1', 's3-eth2', 's3-eth3', 's3-eth4', 's3-eth5', 's3-eth6', 's3-eth7', 's3-eth8']
+[TOPO] Testando conectividade inicial (warm-up de ARP, exceto h9)...
+
+------------------------------------------------------------------------------
+ [s3 #1] Overhead BASELINE (3x, 50 pacotes, 10s)
+------------------------------------------------------------------------------
+  [baseline] medição 1/3: latência=9.032 ms, banda=9.51 Mbps
+  [baseline] medição 2/3: latência=10.119 ms, banda=9.41 Mbps
+  [baseline] medição 3/3: latência=9.168 ms, banda=9.55 Mbps
+
+------------------------------------------------------------------------------
+ [s3 #1] Iniciando detector único (espelho de s1+s2+s3 via VLAN, aprendizado: 15s)
+------------------------------------------------------------------------------
+
+============================================================
+  ARP IDS — Detector Híbrido de ARP Spoofing
+============================================================
+  Ambiente   : MININET
+  Interfaces : h7-eth0
+  Mapa VLAN  : {101: 's1', 102: 's2', 103: 's3'}
+  Modo NAC   : ATIVO (bloqueio automático)
+  Método     : ovs-ofctl (bridge padrão: s1)
+  Aprendizado: 15s
+  Confirmação: 2 pacotes por IP/MAC
+  Debug      : inativo
+============================================================
+
+[INFO] Fase de aprendizado iniciada (15s)...
+[LEARN?]         10.0.0.1  ->  00:00:00:00:00:01  (aguardando confirmação...)
+[LEARN]          10.0.0.1  ->  00:00:00:00:00:01  ✓
+[LEARN?]         10.0.0.2  ->  00:00:00:00:00:02  (aguardando confirmação...)
+[LEARN?]         10.0.0.3  ->  00:00:00:00:00:03  (aguardando confirmação...)
+[LEARN?]         10.0.0.4  ->  00:00:00:00:00:04  (aguardando confirmação...)
+[LEARN]          10.0.0.4  ->  00:00:00:00:00:04  ✓
+[LEARN?]         10.0.0.5  ->  00:00:00:00:00:05  (aguardando confirmação...)
+[LEARN]          10.0.0.5  ->  00:00:00:00:00:05  ✓
+[LEARN?]         10.0.0.6  ->  00:00:00:00:00:06  (aguardando confirmação...)
+[LEARN]          10.0.0.6  ->  00:00:00:00:00:06  ✓
+[LEARN?]         10.0.0.7  ->  00:00:00:00:00:07  (aguardando confirmação...)
+[LEARN]          10.0.0.7  ->  00:00:00:00:00:07  ✓
+[LEARN?]         10.0.0.8  ->  00:00:00:00:00:08  (aguardando confirmação...)
+[LEARN]          10.0.0.8  ->  00:00:00:00:00:08  ✓
+[LEARN?]        10.0.0.10  ->  00:00:00:00:00:0a  (aguardando confirmação...)
+[LEARN]         10.0.0.10  ->  00:00:00:00:00:0a  ✓
+[LEARN?]        10.0.0.11  ->  00:00:00:00:00:0b  (aguardando confirmação...)
+[LEARN]         10.0.0.11  ->  00:00:00:00:00:0b  ✓
+[LEARN?]        10.0.0.12  ->  00:00:00:00:00:0c  (aguardando confirmação...)
+[LEARN]         10.0.0.12  ->  00:00:00:00:00:0c  ✓
+[LEARN]          10.0.0.2  ->  00:00:00:00:00:02  ✓
+[LEARN]          10.0.0.3  ->  00:00:00:00:00:03  ✓
+
+[INFO] Aprendizado concluído. 11 host(s) mapeado(s). Monitorando...
+
+                 10.0.0.1  ->  00:00:00:00:00:01
+                10.0.0.10  ->  00:00:00:00:00:0a
+                10.0.0.11  ->  00:00:00:00:00:0b
+                10.0.0.12  ->  00:00:00:00:00:0c
+                 10.0.0.2  ->  00:00:00:00:00:02
+                 10.0.0.3  ->  00:00:00:00:00:03
+                 10.0.0.4  ->  00:00:00:00:00:04
+                 10.0.0.5  ->  00:00:00:00:00:05
+                 10.0.0.6  ->  00:00:00:00:00:06
+                 10.0.0.7  ->  00:00:00:00:00:07
+                 10.0.0.8  ->  00:00:00:00:00:08
+
+[INFO] Origem dos ARPs no aprendizado: s1=128 s2=136 s3=202 sem-tag=85
+
+
+
+
+------------------------------------------------------------------------------
+ [s3 #1] Overhead COM detector ativo
+------------------------------------------------------------------------------
+  [com IDS] medição 1/3: latência=9.358 ms, banda=9.53 Mbps
+  [com IDS] medição 2/3: latência=9.47 ms, banda=9.55 Mbps
+  [com IDS] medição 3/3: latência=8.664 ms, banda=9.56 Mbps
+
+------------------------------------------------------------------------------
+ [s3 #1] Rodadas de ataque (hosts atacantes dedicados por rodada)
+------------------------------------------------------------------------------
+  Rodada 1/4: atacante=h8 (00:00:00:00:00:08)  arpspoof 10.0.0.1 <-> 10.0.0.2
+
+============================================================
+  ALERTA #1 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.2
+  MAC legítimo    : 00:00:00:00:00:02
+  MAC atacante    : 00:00:00:00:00:08  <-- FALSO
+  Bridge alvo     : s3
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:08 na bridge s3 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's3' para 00:00:00:00:00:08
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 2/4: atacante=h10 (00:00:00:00:00:0a)  arpspoof 10.0.0.4 <-> 10.0.0.5
+
+============================================================
+  ALERTA #2 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.5
+  MAC legítimo    : 00:00:00:00:00:05
+  MAC atacante    : 00:00:00:00:00:0a  <-- FALSO
+  Bridge alvo     : s3
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0a na bridge s3 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's3' para 00:00:00:00:00:0a
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 3/4: atacante=h11 (00:00:00:00:00:0b)  arpspoof 10.0.0.3 <-> 10.0.0.6
+
+============================================================
+  ALERTA #3 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0b  <-- FALSO
+  Bridge alvo     : s3
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0b na bridge s3 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's3' para 00:00:00:00:00:0b
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 4/4: atacante=h12 (00:00:00:00:00:0c)  arpspoof 10.0.0.1 <-> 10.0.0.6
+
+============================================================
+  ALERTA #4 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0c  <-- FALSO
+  Bridge alvo     : s3
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0c na bridge s3 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's3' para 00:00:00:00:00:0c
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+
+------------------------------------------------------------------------------
+ [s3 #1] Falso positivo — host reincidente (h3)
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+ [s3 #1] Host genuinamente novo pós-aprendizado (h9)
+------------------------------------------------------------------------------
+[NEW?]         10.0.0.9  ->  00:00:00:00:00:09  (host não aprendido, aguardando confirmação...)
+[NEW]  Host confirmado após o aprendizado: 10.0.0.9 -> 00:00:00:00:00:09
+[AVISO] Host não estava na fase de aprendizado — verifique se essa entrada era esperada.
+
+ 
+[PROGRESSO] 11/15 execuções concluídas em 41.0 min.
+
+==============================================================================
+ CENÁRIO s3 — EXECUÇÃO 2/5 (geral: 12/15)
+==============================================================================
+[TOPO] Criando rede com atacante (h8) ligado a s3...
+[TOPO] Espelho s1: s1-spn (push VLAN 101) -> s1-rx1 -> s1-eth3
+[TOPO] Espelho s2: s2-spn (push VLAN 102) -> s1-rx2 -> s1-eth3
+[TOPO] Espelho s3: s3-spn (push VLAN 103) -> s1-rx3 -> s1-eth3
+[TOPO] Espelho em s1: saída=s1-spn  monitorando=['s1-eth1', 's1-eth2', 's1-eth4']
+[TOPO] Espelho em s2: saída=s2-spn  monitorando=['s2-eth1', 's2-eth2', 's2-eth3', 's2-eth4']
+[TOPO] Espelho em s3: saída=s3-spn  monitorando=['s3-eth1', 's3-eth2', 's3-eth3', 's3-eth4', 's3-eth5', 's3-eth6', 's3-eth7', 's3-eth8']
+[TOPO] Testando conectividade inicial (warm-up de ARP, exceto h9)...
+
+------------------------------------------------------------------------------
+ [s3 #2] Overhead BASELINE (3x, 50 pacotes, 10s)
+------------------------------------------------------------------------------
+  [baseline] medição 1/3: latência=9.46 ms, banda=9.54 Mbps
+  [baseline] medição 2/3: latência=9.107 ms, banda=9.55 Mbps
+  [baseline] medição 3/3: latência=8.96 ms, banda=9.53 Mbps
+
+------------------------------------------------------------------------------
+ [s3 #2] Iniciando detector único (espelho de s1+s2+s3 via VLAN, aprendizado: 15s)
+------------------------------------------------------------------------------
+
+============================================================
+  ARP IDS — Detector Híbrido de ARP Spoofing
+============================================================
+  Ambiente   : MININET
+  Interfaces : h7-eth0
+  Mapa VLAN  : {101: 's1', 102: 's2', 103: 's3'}
+  Modo NAC   : ATIVO (bloqueio automático)
+  Método     : ovs-ofctl (bridge padrão: s1)
+  Aprendizado: 15s
+  Confirmação: 2 pacotes por IP/MAC
+  Debug      : inativo
+============================================================
+
+[INFO] Fase de aprendizado iniciada (15s)...
+[LEARN?]         10.0.0.1  ->  00:00:00:00:00:01  (aguardando confirmação...)
+[LEARN]          10.0.0.1  ->  00:00:00:00:00:01  ✓
+[LEARN?]         10.0.0.2  ->  00:00:00:00:00:02  (aguardando confirmação...)
+[LEARN?]         10.0.0.3  ->  00:00:00:00:00:03  (aguardando confirmação...)
+[LEARN?]         10.0.0.4  ->  00:00:00:00:00:04  (aguardando confirmação...)
+[LEARN]          10.0.0.4  ->  00:00:00:00:00:04  ✓
+[LEARN?]         10.0.0.5  ->  00:00:00:00:00:05  (aguardando confirmação...)
+[LEARN]          10.0.0.5  ->  00:00:00:00:00:05  ✓
+[LEARN?]         10.0.0.6  ->  00:00:00:00:00:06  (aguardando confirmação...)
+[LEARN]          10.0.0.6  ->  00:00:00:00:00:06  ✓
+[LEARN?]         10.0.0.7  ->  00:00:00:00:00:07  (aguardando confirmação...)
+[LEARN]          10.0.0.7  ->  00:00:00:00:00:07  ✓
+[LEARN?]         10.0.0.8  ->  00:00:00:00:00:08  (aguardando confirmação...)
+[LEARN]          10.0.0.8  ->  00:00:00:00:00:08  ✓
+[LEARN?]        10.0.0.10  ->  00:00:00:00:00:0a  (aguardando confirmação...)
+[LEARN]         10.0.0.10  ->  00:00:00:00:00:0a  ✓
+[LEARN?]        10.0.0.11  ->  00:00:00:00:00:0b  (aguardando confirmação...)
+[LEARN]         10.0.0.11  ->  00:00:00:00:00:0b  ✓
+[LEARN?]        10.0.0.12  ->  00:00:00:00:00:0c  (aguardando confirmação...)
+[LEARN]         10.0.0.12  ->  00:00:00:00:00:0c  ✓
+[LEARN]          10.0.0.2  ->  00:00:00:00:00:02  ✓
+[LEARN]          10.0.0.3  ->  00:00:00:00:00:03  ✓
+
+[INFO] Aprendizado concluído. 11 host(s) mapeado(s). Monitorando...
+
+                 10.0.0.1  ->  00:00:00:00:00:01
+                10.0.0.10  ->  00:00:00:00:00:0a
+                10.0.0.11  ->  00:00:00:00:00:0b
+                10.0.0.12  ->  00:00:00:00:00:0c
+                 10.0.0.2  ->  00:00:00:00:00:02
+                 10.0.0.3  ->  00:00:00:00:00:03
+                 10.0.0.4  ->  00:00:00:00:00:04
+                 10.0.0.5  ->  00:00:00:00:00:05
+                 10.0.0.6  ->  00:00:00:00:00:06
+                 10.0.0.7  ->  00:00:00:00:00:07
+                 10.0.0.8  ->  00:00:00:00:00:08
+
+[INFO] Origem dos ARPs no aprendizado: s1=128 s2=136 s3=202 sem-tag=85
+
+
+
+
+------------------------------------------------------------------------------
+ [s3 #2] Overhead COM detector ativo
+------------------------------------------------------------------------------
+  [com IDS] medição 1/3: latência=9.356 ms, banda=9.55 Mbps
+  [com IDS] medição 2/3: latência=9.509 ms, banda=9.53 Mbps
+  [com IDS] medição 3/3: latência=9.132 ms, banda=9.47 Mbps
+
+------------------------------------------------------------------------------
+ [s3 #2] Rodadas de ataque (hosts atacantes dedicados por rodada)
+------------------------------------------------------------------------------
+  Rodada 1/4: atacante=h8 (00:00:00:00:00:08)  arpspoof 10.0.0.1 <-> 10.0.0.2
+
+============================================================
+  ALERTA #1 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.2
+  MAC legítimo    : 00:00:00:00:00:02
+  MAC atacante    : 00:00:00:00:00:08  <-- FALSO
+  Bridge alvo     : s3
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:08 na bridge s3 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's3' para 00:00:00:00:00:08
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 2/4: atacante=h10 (00:00:00:00:00:0a)  arpspoof 10.0.0.4 <-> 10.0.0.5
+
+============================================================
+  ALERTA #2 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.5
+  MAC legítimo    : 00:00:00:00:00:05
+  MAC atacante    : 00:00:00:00:00:0a  <-- FALSO
+  Bridge alvo     : s3
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0a na bridge s3 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's3' para 00:00:00:00:00:0a
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 3/4: atacante=h11 (00:00:00:00:00:0b)  arpspoof 10.0.0.3 <-> 10.0.0.6
+
+============================================================
+  ALERTA #3 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0b  <-- FALSO
+  Bridge alvo     : s3
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0b na bridge s3 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's3' para 00:00:00:00:00:0b
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 4/4: atacante=h12 (00:00:00:00:00:0c)  arpspoof 10.0.0.1 <-> 10.0.0.6
+
+============================================================
+  ALERTA #4 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0c  <-- FALSO
+  Bridge alvo     : s3
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0c na bridge s3 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's3' para 00:00:00:00:00:0c
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+
+------------------------------------------------------------------------------
+ [s3 #2] Falso positivo — host reincidente (h3)
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+ [s3 #2] Host genuinamente novo pós-aprendizado (h9)
+------------------------------------------------------------------------------
+[NEW?]         10.0.0.9  ->  00:00:00:00:00:09  (host não aprendido, aguardando confirmação...)
+[NEW]  Host confirmado após o aprendizado: 10.0.0.9 -> 00:00:00:00:00:09
+[AVISO] Host não estava na fase de aprendizado — verifique se essa entrada era esperada.
+
+ 
+[PROGRESSO] 12/15 execuções concluídas em 44.7 min.
+
+==============================================================================
+ CENÁRIO s3 — EXECUÇÃO 3/5 (geral: 13/15)
+==============================================================================
+[TOPO] Criando rede com atacante (h8) ligado a s3...
+[TOPO] Espelho s1: s1-spn (push VLAN 101) -> s1-rx1 -> s1-eth3
+[TOPO] Espelho s2: s2-spn (push VLAN 102) -> s1-rx2 -> s1-eth3
+[TOPO] Espelho s3: s3-spn (push VLAN 103) -> s1-rx3 -> s1-eth3
+[TOPO] Espelho em s1: saída=s1-spn  monitorando=['s1-eth1', 's1-eth2', 's1-eth4']
+[TOPO] Espelho em s2: saída=s2-spn  monitorando=['s2-eth1', 's2-eth2', 's2-eth3', 's2-eth4']
+[TOPO] Espelho em s3: saída=s3-spn  monitorando=['s3-eth1', 's3-eth2', 's3-eth3', 's3-eth4', 's3-eth5', 's3-eth6', 's3-eth7', 's3-eth8']
+[TOPO] Testando conectividade inicial (warm-up de ARP, exceto h9)...
+
+------------------------------------------------------------------------------
+ [s3 #3] Overhead BASELINE (3x, 50 pacotes, 10s)
+------------------------------------------------------------------------------
+  [baseline] medição 1/3: latência=8.847 ms, banda=9.52 Mbps
+  [baseline] medição 2/3: latência=9.509 ms, banda=9.54 Mbps
+  [baseline] medição 3/3: latência=9.658 ms, banda=9.55 Mbps
+
+------------------------------------------------------------------------------
+ [s3 #3] Iniciando detector único (espelho de s1+s2+s3 via VLAN, aprendizado: 15s)
+------------------------------------------------------------------------------
+
+============================================================
+  ARP IDS — Detector Híbrido de ARP Spoofing
+============================================================
+  Ambiente   : MININET
+  Interfaces : h7-eth0
+  Mapa VLAN  : {101: 's1', 102: 's2', 103: 's3'}
+  Modo NAC   : ATIVO (bloqueio automático)
+  Método     : ovs-ofctl (bridge padrão: s1)
+  Aprendizado: 15s
+  Confirmação: 2 pacotes por IP/MAC
+  Debug      : inativo
+============================================================
+
+[INFO] Fase de aprendizado iniciada (15s)...
+[LEARN?]         10.0.0.1  ->  00:00:00:00:00:01  (aguardando confirmação...)
+[LEARN]          10.0.0.1  ->  00:00:00:00:00:01  ✓
+[LEARN?]         10.0.0.2  ->  00:00:00:00:00:02  (aguardando confirmação...)
+[LEARN?]         10.0.0.3  ->  00:00:00:00:00:03  (aguardando confirmação...)
+[LEARN?]         10.0.0.4  ->  00:00:00:00:00:04  (aguardando confirmação...)
+[LEARN]          10.0.0.4  ->  00:00:00:00:00:04  ✓
+[LEARN?]         10.0.0.5  ->  00:00:00:00:00:05  (aguardando confirmação...)
+[LEARN]          10.0.0.5  ->  00:00:00:00:00:05  ✓
+[LEARN?]         10.0.0.6  ->  00:00:00:00:00:06  (aguardando confirmação...)
+[LEARN]          10.0.0.6  ->  00:00:00:00:00:06  ✓
+[LEARN?]         10.0.0.7  ->  00:00:00:00:00:07  (aguardando confirmação...)
+[LEARN]          10.0.0.7  ->  00:00:00:00:00:07  ✓
+[LEARN?]         10.0.0.8  ->  00:00:00:00:00:08  (aguardando confirmação...)
+[LEARN]          10.0.0.8  ->  00:00:00:00:00:08  ✓
+[LEARN?]        10.0.0.10  ->  00:00:00:00:00:0a  (aguardando confirmação...)
+[LEARN]         10.0.0.10  ->  00:00:00:00:00:0a  ✓
+[LEARN?]        10.0.0.11  ->  00:00:00:00:00:0b  (aguardando confirmação...)
+[LEARN]         10.0.0.11  ->  00:00:00:00:00:0b  ✓
+[LEARN?]        10.0.0.12  ->  00:00:00:00:00:0c  (aguardando confirmação...)
+[LEARN]         10.0.0.12  ->  00:00:00:00:00:0c  ✓
+[LEARN]          10.0.0.2  ->  00:00:00:00:00:02  ✓
+[LEARN]          10.0.0.3  ->  00:00:00:00:00:03  ✓
+
+[INFO] Aprendizado concluído. 11 host(s) mapeado(s). Monitorando...
+
+                 10.0.0.1  ->  00:00:00:00:00:01
+                10.0.0.10  ->  00:00:00:00:00:0a
+                10.0.0.11  ->  00:00:00:00:00:0b
+                10.0.0.12  ->  00:00:00:00:00:0c
+                 10.0.0.2  ->  00:00:00:00:00:02
+                 10.0.0.3  ->  00:00:00:00:00:03
+                 10.0.0.4  ->  00:00:00:00:00:04
+                 10.0.0.5  ->  00:00:00:00:00:05
+                 10.0.0.6  ->  00:00:00:00:00:06
+                 10.0.0.7  ->  00:00:00:00:00:07
+                 10.0.0.8  ->  00:00:00:00:00:08
+
+[INFO] Origem dos ARPs no aprendizado: s1=128 s2=136 s3=202 sem-tag=85
+
+
+
+
+------------------------------------------------------------------------------
+ [s3 #3] Overhead COM detector ativo
+------------------------------------------------------------------------------
+  [com IDS] medição 1/3: latência=9.778 ms, banda=9.49 Mbps
+  [com IDS] medição 2/3: latência=9.055 ms, banda=9.55 Mbps
+  [com IDS] medição 3/3: latência=9.009 ms, banda=9.53 Mbps
+
+------------------------------------------------------------------------------
+ [s3 #3] Rodadas de ataque (hosts atacantes dedicados por rodada)
+------------------------------------------------------------------------------
+  Rodada 1/4: atacante=h8 (00:00:00:00:00:08)  arpspoof 10.0.0.1 <-> 10.0.0.2
+
+============================================================
+  ALERTA #1 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.2
+  MAC legítimo    : 00:00:00:00:00:02
+  MAC atacante    : 00:00:00:00:00:08  <-- FALSO
+  Bridge alvo     : s3
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:08 na bridge s3 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's3' para 00:00:00:00:00:08
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 2/4: atacante=h10 (00:00:00:00:00:0a)  arpspoof 10.0.0.4 <-> 10.0.0.5
+
+============================================================
+  ALERTA #2 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.5
+  MAC legítimo    : 00:00:00:00:00:05
+  MAC atacante    : 00:00:00:00:00:0a  <-- FALSO
+  Bridge alvo     : s3
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0a na bridge s3 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's3' para 00:00:00:00:00:0a
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 3/4: atacante=h11 (00:00:00:00:00:0b)  arpspoof 10.0.0.3 <-> 10.0.0.6
+
+============================================================
+  ALERTA #3 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0b  <-- FALSO
+  Bridge alvo     : s3
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0b na bridge s3 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's3' para 00:00:00:00:00:0b
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 4/4: atacante=h12 (00:00:00:00:00:0c)  arpspoof 10.0.0.1 <-> 10.0.0.6
+
+============================================================
+  ALERTA #4 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0c  <-- FALSO
+  Bridge alvo     : s3
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0c na bridge s3 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's3' para 00:00:00:00:00:0c
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+
+------------------------------------------------------------------------------
+ [s3 #3] Falso positivo — host reincidente (h3)
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+ [s3 #3] Host genuinamente novo pós-aprendizado (h9)
+------------------------------------------------------------------------------
+[NEW?]         10.0.0.9  ->  00:00:00:00:00:09  (host não aprendido, aguardando confirmação...)
+[NEW]  Host confirmado após o aprendizado: 10.0.0.9 -> 00:00:00:00:00:09
+[AVISO] Host não estava na fase de aprendizado — verifique se essa entrada era esperada.
+
+ 
+[PROGRESSO] 13/15 execuções concluídas em 48.4 min.
+
+==============================================================================
+ CENÁRIO s3 — EXECUÇÃO 4/5 (geral: 14/15)
+==============================================================================
+[TOPO] Criando rede com atacante (h8) ligado a s3...
+[TOPO] Espelho s1: s1-spn (push VLAN 101) -> s1-rx1 -> s1-eth3
+[TOPO] Espelho s2: s2-spn (push VLAN 102) -> s1-rx2 -> s1-eth3
+[TOPO] Espelho s3: s3-spn (push VLAN 103) -> s1-rx3 -> s1-eth3
+[TOPO] Espelho em s1: saída=s1-spn  monitorando=['s1-eth1', 's1-eth2', 's1-eth4']
+[TOPO] Espelho em s2: saída=s2-spn  monitorando=['s2-eth1', 's2-eth2', 's2-eth3', 's2-eth4']
+[TOPO] Espelho em s3: saída=s3-spn  monitorando=['s3-eth1', 's3-eth2', 's3-eth3', 's3-eth4', 's3-eth5', 's3-eth6', 's3-eth7', 's3-eth8']
+[TOPO] Testando conectividade inicial (warm-up de ARP, exceto h9)...
+
+------------------------------------------------------------------------------
+ [s3 #4] Overhead BASELINE (3x, 50 pacotes, 10s)
+------------------------------------------------------------------------------
+  [baseline] medição 1/3: latência=9.582 ms, banda=9.54 Mbps
+  [baseline] medição 2/3: latência=9.37 ms, banda=9.54 Mbps
+  [baseline] medição 3/3: latência=9.319 ms, banda=9.45 Mbps
+
+------------------------------------------------------------------------------
+ [s3 #4] Iniciando detector único (espelho de s1+s2+s3 via VLAN, aprendizado: 15s)
+------------------------------------------------------------------------------
+
+============================================================
+  ARP IDS — Detector Híbrido de ARP Spoofing
+============================================================
+  Ambiente   : MININET
+  Interfaces : h7-eth0
+  Mapa VLAN  : {101: 's1', 102: 's2', 103: 's3'}
+  Modo NAC   : ATIVO (bloqueio automático)
+  Método     : ovs-ofctl (bridge padrão: s1)
+  Aprendizado: 15s
+  Confirmação: 2 pacotes por IP/MAC
+  Debug      : inativo
+============================================================
+
+[INFO] Fase de aprendizado iniciada (15s)...
+[LEARN?]         10.0.0.1  ->  00:00:00:00:00:01  (aguardando confirmação...)
+[LEARN]          10.0.0.1  ->  00:00:00:00:00:01  ✓
+[LEARN?]         10.0.0.2  ->  00:00:00:00:00:02  (aguardando confirmação...)
+[LEARN?]         10.0.0.3  ->  00:00:00:00:00:03  (aguardando confirmação...)
+[LEARN?]         10.0.0.4  ->  00:00:00:00:00:04  (aguardando confirmação...)
+[LEARN]          10.0.0.4  ->  00:00:00:00:00:04  ✓
+[LEARN?]         10.0.0.5  ->  00:00:00:00:00:05  (aguardando confirmação...)
+[LEARN]          10.0.0.5  ->  00:00:00:00:00:05  ✓
+[LEARN?]         10.0.0.6  ->  00:00:00:00:00:06  (aguardando confirmação...)
+[LEARN]          10.0.0.6  ->  00:00:00:00:00:06  ✓
+[LEARN?]         10.0.0.7  ->  00:00:00:00:00:07  (aguardando confirmação...)
+[LEARN]          10.0.0.7  ->  00:00:00:00:00:07  ✓
+[LEARN?]         10.0.0.8  ->  00:00:00:00:00:08  (aguardando confirmação...)
+[LEARN]          10.0.0.8  ->  00:00:00:00:00:08  ✓
+[LEARN?]        10.0.0.10  ->  00:00:00:00:00:0a  (aguardando confirmação...)
+[LEARN]         10.0.0.10  ->  00:00:00:00:00:0a  ✓
+[LEARN?]        10.0.0.11  ->  00:00:00:00:00:0b  (aguardando confirmação...)
+[LEARN]         10.0.0.11  ->  00:00:00:00:00:0b  ✓
+[LEARN?]        10.0.0.12  ->  00:00:00:00:00:0c  (aguardando confirmação...)
+[LEARN]         10.0.0.12  ->  00:00:00:00:00:0c  ✓
+[LEARN]          10.0.0.2  ->  00:00:00:00:00:02  ✓
+[LEARN]          10.0.0.3  ->  00:00:00:00:00:03  ✓
+
+[INFO] Aprendizado concluído. 11 host(s) mapeado(s). Monitorando...
+
+                 10.0.0.1  ->  00:00:00:00:00:01
+                10.0.0.10  ->  00:00:00:00:00:0a
+                10.0.0.11  ->  00:00:00:00:00:0b
+                10.0.0.12  ->  00:00:00:00:00:0c
+                 10.0.0.2  ->  00:00:00:00:00:02
+                 10.0.0.3  ->  00:00:00:00:00:03
+                 10.0.0.4  ->  00:00:00:00:00:04
+                 10.0.0.5  ->  00:00:00:00:00:05
+                 10.0.0.6  ->  00:00:00:00:00:06
+                 10.0.0.7  ->  00:00:00:00:00:07
+                 10.0.0.8  ->  00:00:00:00:00:08
+
+[INFO] Origem dos ARPs no aprendizado: s1=128 s2=136 s3=202 sem-tag=85
+
+
+
+
+------------------------------------------------------------------------------
+ [s3 #4] Overhead COM detector ativo
+------------------------------------------------------------------------------
+  [com IDS] medição 1/3: latência=9.609 ms, banda=9.54 Mbps
+  [com IDS] medição 2/3: latência=8.834 ms, banda=9.5 Mbps
+  [com IDS] medição 3/3: latência=8.844 ms, banda=9.55 Mbps
+
+------------------------------------------------------------------------------
+ [s3 #4] Rodadas de ataque (hosts atacantes dedicados por rodada)
+------------------------------------------------------------------------------
+  Rodada 1/4: atacante=h8 (00:00:00:00:00:08)  arpspoof 10.0.0.1 <-> 10.0.0.2
+
+============================================================
+  ALERTA #1 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.2
+  MAC legítimo    : 00:00:00:00:00:02
+  MAC atacante    : 00:00:00:00:00:08  <-- FALSO
+  Bridge alvo     : s3
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:08 na bridge s3 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's3' para 00:00:00:00:00:08
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 2/4: atacante=h10 (00:00:00:00:00:0a)  arpspoof 10.0.0.4 <-> 10.0.0.5
+
+============================================================
+  ALERTA #2 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.5
+  MAC legítimo    : 00:00:00:00:00:05
+  MAC atacante    : 00:00:00:00:00:0a  <-- FALSO
+  Bridge alvo     : s3
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0a na bridge s3 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's3' para 00:00:00:00:00:0a
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 3/4: atacante=h11 (00:00:00:00:00:0b)  arpspoof 10.0.0.3 <-> 10.0.0.6
+
+============================================================
+  ALERTA #3 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0b  <-- FALSO
+  Bridge alvo     : s3
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0b na bridge s3 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's3' para 00:00:00:00:00:0b
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 4/4: atacante=h12 (00:00:00:00:00:0c)  arpspoof 10.0.0.1 <-> 10.0.0.6
+
+============================================================
+  ALERTA #4 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0c  <-- FALSO
+  Bridge alvo     : s3
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0c na bridge s3 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's3' para 00:00:00:00:00:0c
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+
+------------------------------------------------------------------------------
+ [s3 #4] Falso positivo — host reincidente (h3)
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+ [s3 #4] Host genuinamente novo pós-aprendizado (h9)
+------------------------------------------------------------------------------
+[NEW?]         10.0.0.9  ->  00:00:00:00:00:09  (host não aprendido, aguardando confirmação...)
+[NEW]  Host confirmado após o aprendizado: 10.0.0.9 -> 00:00:00:00:00:09
+[AVISO] Host não estava na fase de aprendizado — verifique se essa entrada era esperada.
+
+ 
+[PROGRESSO] 14/15 execuções concluídas em 52.1 min.
+
+==============================================================================
+ CENÁRIO s3 — EXECUÇÃO 5/5 (geral: 15/15)
+==============================================================================
+[TOPO] Criando rede com atacante (h8) ligado a s3...
+[TOPO] Espelho s1: s1-spn (push VLAN 101) -> s1-rx1 -> s1-eth3
+[TOPO] Espelho s2: s2-spn (push VLAN 102) -> s1-rx2 -> s1-eth3
+[TOPO] Espelho s3: s3-spn (push VLAN 103) -> s1-rx3 -> s1-eth3
+[TOPO] Espelho em s1: saída=s1-spn  monitorando=['s1-eth1', 's1-eth2', 's1-eth4']
+[TOPO] Espelho em s2: saída=s2-spn  monitorando=['s2-eth1', 's2-eth2', 's2-eth3', 's2-eth4']
+[TOPO] Espelho em s3: saída=s3-spn  monitorando=['s3-eth1', 's3-eth2', 's3-eth3', 's3-eth4', 's3-eth5', 's3-eth6', 's3-eth7', 's3-eth8']
+[TOPO] Testando conectividade inicial (warm-up de ARP, exceto h9)...
+
+------------------------------------------------------------------------------
+ [s3 #5] Overhead BASELINE (3x, 50 pacotes, 10s)
+------------------------------------------------------------------------------
+  [baseline] medição 1/3: latência=9.419 ms, banda=9.48 Mbps
+  [baseline] medição 2/3: latência=9.026 ms, banda=9.2 Mbps
+  [baseline] medição 3/3: latência=9.148 ms, banda=9.24 Mbps
+
+------------------------------------------------------------------------------
+ [s3 #5] Iniciando detector único (espelho de s1+s2+s3 via VLAN, aprendizado: 15s)
+------------------------------------------------------------------------------
+
+============================================================
+  ARP IDS — Detector Híbrido de ARP Spoofing
+============================================================
+  Ambiente   : MININET
+  Interfaces : h7-eth0
+  Mapa VLAN  : {101: 's1', 102: 's2', 103: 's3'}
+  Modo NAC   : ATIVO (bloqueio automático)
+  Método     : ovs-ofctl (bridge padrão: s1)
+  Aprendizado: 15s
+  Confirmação: 2 pacotes por IP/MAC
+  Debug      : inativo
+============================================================
+
+[INFO] Fase de aprendizado iniciada (15s)...
+[LEARN?]         10.0.0.1  ->  00:00:00:00:00:01  (aguardando confirmação...)
+[LEARN]          10.0.0.1  ->  00:00:00:00:00:01  ✓
+[LEARN?]         10.0.0.2  ->  00:00:00:00:00:02  (aguardando confirmação...)
+[LEARN?]         10.0.0.3  ->  00:00:00:00:00:03  (aguardando confirmação...)
+[LEARN?]         10.0.0.4  ->  00:00:00:00:00:04  (aguardando confirmação...)
+[LEARN]          10.0.0.4  ->  00:00:00:00:00:04  ✓
+[LEARN?]         10.0.0.5  ->  00:00:00:00:00:05  (aguardando confirmação...)
+[LEARN]          10.0.0.5  ->  00:00:00:00:00:05  ✓
+[LEARN?]         10.0.0.6  ->  00:00:00:00:00:06  (aguardando confirmação...)
+[LEARN]          10.0.0.6  ->  00:00:00:00:00:06  ✓
+[LEARN?]         10.0.0.7  ->  00:00:00:00:00:07  (aguardando confirmação...)
+[LEARN]          10.0.0.7  ->  00:00:00:00:00:07  ✓
+[LEARN?]         10.0.0.8  ->  00:00:00:00:00:08  (aguardando confirmação...)
+[LEARN]          10.0.0.8  ->  00:00:00:00:00:08  ✓
+[LEARN?]        10.0.0.10  ->  00:00:00:00:00:0a  (aguardando confirmação...)
+[LEARN]         10.0.0.10  ->  00:00:00:00:00:0a  ✓
+[LEARN?]        10.0.0.11  ->  00:00:00:00:00:0b  (aguardando confirmação...)
+[LEARN]         10.0.0.11  ->  00:00:00:00:00:0b  ✓
+[LEARN?]        10.0.0.12  ->  00:00:00:00:00:0c  (aguardando confirmação...)
+[LEARN]         10.0.0.12  ->  00:00:00:00:00:0c  ✓
+[LEARN]          10.0.0.2  ->  00:00:00:00:00:02  ✓
+[LEARN]          10.0.0.3  ->  00:00:00:00:00:03  ✓
+
+[INFO] Aprendizado concluído. 11 host(s) mapeado(s). Monitorando...
+
+                 10.0.0.1  ->  00:00:00:00:00:01
+                10.0.0.10  ->  00:00:00:00:00:0a
+                10.0.0.11  ->  00:00:00:00:00:0b
+                10.0.0.12  ->  00:00:00:00:00:0c
+                 10.0.0.2  ->  00:00:00:00:00:02
+                 10.0.0.3  ->  00:00:00:00:00:03
+                 10.0.0.4  ->  00:00:00:00:00:04
+                 10.0.0.5  ->  00:00:00:00:00:05
+                 10.0.0.6  ->  00:00:00:00:00:06
+                 10.0.0.7  ->  00:00:00:00:00:07
+                 10.0.0.8  ->  00:00:00:00:00:08
+
+[INFO] Origem dos ARPs no aprendizado: s1=128 s2=136 s3=202 sem-tag=85
+
+
+
+
+------------------------------------------------------------------------------
+ [s3 #5] Overhead COM detector ativo
+------------------------------------------------------------------------------
+  [com IDS] medição 1/3: latência=8.81 ms, banda=9.55 Mbps
+  [com IDS] medição 2/3: latência=9.049 ms, banda=9.25 Mbps
+  [com IDS] medição 3/3: latência=9.277 ms, banda=9.08 Mbps
+
+------------------------------------------------------------------------------
+ [s3 #5] Rodadas de ataque (hosts atacantes dedicados por rodada)
+------------------------------------------------------------------------------
+  Rodada 1/4: atacante=h8 (00:00:00:00:00:08)  arpspoof 10.0.0.1 <-> 10.0.0.2
+
+============================================================
+  ALERTA #1 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.2
+  MAC legítimo    : 00:00:00:00:00:02
+  MAC atacante    : 00:00:00:00:00:08  <-- FALSO
+  Bridge alvo     : s3
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:08 na bridge s3 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's3' para 00:00:00:00:00:08
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 2/4: atacante=h10 (00:00:00:00:00:0a)  arpspoof 10.0.0.4 <-> 10.0.0.5
+
+============================================================
+  ALERTA #2 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.5
+  MAC legítimo    : 00:00:00:00:00:05
+  MAC atacante    : 00:00:00:00:00:0a  <-- FALSO
+  Bridge alvo     : s3
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0a na bridge s3 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's3' para 00:00:00:00:00:0a
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 3/4: atacante=h11 (00:00:00:00:00:0b)  arpspoof 10.0.0.3 <-> 10.0.0.6
+
+============================================================
+  ALERTA #3 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0b  <-- FALSO
+  Bridge alvo     : s3
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0b na bridge s3 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's3' para 00:00:00:00:00:0b
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+  Rodada 4/4: atacante=h12 (00:00:00:00:00:0c)  arpspoof 10.0.0.1 <-> 10.0.0.6
+
+============================================================
+  ALERTA #4 — ARP SPOOFING DETECTADO
+============================================================
+  IP  falsificado : 10.0.0.6
+  MAC legítimo    : 00:00:00:00:00:06
+  MAC atacante    : 00:00:00:00:00:0c  <-- FALSO
+  Bridge alvo     : s3
+  Ambiente        : MININET
+============================================================
+
+[NAC] Bloqueando 00:00:00:00:00:0c na bridge s3 (modo: mininet)...
+[NAC-OVS] Flow DROP inserido em 's3' para 00:00:00:00:00:0c
+[HEAL] Enviando ARPs corretivos para 11 host(s)...
+
+
+------------------------------------------------------------------------------
+ [s3 #5] Falso positivo — host reincidente (h3)
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+ [s3 #5] Host genuinamente novo pós-aprendizado (h9)
+------------------------------------------------------------------------------
+[NEW?]         10.0.0.9  ->  00:00:00:00:00:09  (host não aprendido, aguardando confirmação...)
+[NEW]  Host confirmado após o aprendizado: 10.0.0.9 -> 00:00:00:00:00:09
+[AVISO] Host não estava na fase de aprendizado — verifique se essa entrada era esperada.
+
+
+[PROGRESSO] 15/15 execuções concluídas em 55.8 min.
+
+==============================================================================
+ RESUMO FINAL
+==============================================================================
+Cada cenário foi executado 5 vezes, com a topologia reconstruída do zero a cada repetição. Cada rodada de ataque usou um MAC de atacante distinto, simulando dispositivos diferentes — por isso a taxa de detecção por rodada abaixo já reflete tentativas independentes, sem o efeito de mascaramento pelo bloqueio NAC observado na versão anterior dos testes.
+
+Cenário   Execuções   Detecção/rodada     Taxa      
+------------------------------------------------------------------------------
+s1        5           20/20               100.0%
+s2        5           20/20               100.0%
+s3        5           20/20               100.0%
+
+Cenário   Falsos + (h3)     Taxa FP     Host novo aceito (h9)   Alertas h9  
+------------------------------------------------------------------------------
+s1        0/15              0.0%        5/5                     0           
+s2        0/15              0.0%        5/5                     0           
+s3        0/15              0.0%        5/5                     0           
+
+Cenário   Lat. base (ms)      Lat. c/IDS (ms)     Overhead    
+------------------------------------------------------------------------------
+s1        13.44±6.11          12.26±4.21          -8.8%       
+s2        9.03±0.24           9.01±0.26           -0.2%       
+s3        9.31±0.12           9.18±0.12           -1.4%       
+
+Cenário   Banda base (Mbps)     Banda c/IDS (Mbps)    Overhead    
+------------------------------------------------------------------------------
+s1        9.03±0.64             9.09±0.76             +0.6%       
+s2        9.52±0.01             9.50±0.03             -0.2%       
+s3        9.48±0.10             9.48±0.11             +0.1%       
+
+RESUMO GERAL (todos os cenários e repetições agregados):
+  Taxa de detecção geral (por rodada) : 60/60 (100.0%)
+  Taxa de falso positivo (h3)         : 0/45 (0.0%)
+  Host novo aceito corretamente (h9)  : 15/15 (100.0%)
+
+==============================================================================
+ FIM DOS TESTES
+ Tempo total: 55.8 minutos
+==============================================================================
