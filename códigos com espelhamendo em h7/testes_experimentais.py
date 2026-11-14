@@ -7,7 +7,7 @@
 
 COMO RODAR
 ----------
-  1) Coloque este arquivo NA MESMA PASTA do arp_detector_arrumado.py (detector).
+  1) Coloque este arquivo NA MESMA PASTA do arp_detector.py (detector).
   2) sudo python3 testes_experimentais.py
   3) tudo é salvo em resultados_experimentos.txt conforme cada cenário termina.
 ----------
@@ -266,9 +266,7 @@ def iniciar_detector_unico(h7, ifaces_h7, tag):
     """Inicia UM ÚNICO processo do detector escutando a interface local de
     CADA switch ao mesmo tempo (via --iface com múltiplos valores). O
     detector usa pkt.sniffed_on internamente para saber de qual switch cada
-    pacote veio e aplica o NAC na bridge correspondente (--bridge-map) — ver
-    Seção 5.3: um bloqueio inserido sempre no núcleo não teria efeito sobre
-    ataques que nunca saem do switch de acesso onde o atacante está."""
+    pacote veio e aplica o NAC na bridge correspondente (--bridge-map)."""
     caminho = os.path.join(TMP_DIR, f"detector_{tag}.log")
     h7.cmd(f"rm -f {caminho}")
 
@@ -376,7 +374,7 @@ def rodar_cenario(switch_atacante, execucao_idx):
         # 4) TAXA DE DETECÇÃO — cada rodada feita por um HOST ATACANTE
         #    dedicado diferente (h8, h10, h11, h12). O detector único
         #    identifica sozinho, via pkt.sniffed_on, em qual switch cada
-        #    pacote entrou, e bloqueia na bridge correta — não sempre s1.
+        #    pacote entrou, e bloqueia na bridge correta somente se for s1.
         # ----------------------------------------------------------
         subsecao(f"[{switch_atacante} #{execucao_idx}] Rodadas de ataque "
                   f"(hosts atacantes dedicados por rodada)")
@@ -534,8 +532,7 @@ def escrever_resumo(resultados):
         f"topologia reconstruída do zero a cada repetição. Cada rodada de "
         f"ataque usou um MAC de atacante distinto, simulando dispositivos "
         f"diferentes — por isso a taxa de detecção por rodada abaixo já "
-        f"reflete tentativas independentes, sem o efeito de mascaramento "
-        f"pelo bloqueio NAC observado na versão anterior dos testes.")
+        f"reflete tentativas independentes.")
     log("")
 
     log(f"{'Cenário':<10}{'Execuções':<12}{'Detecção/rodada':<20}{'Taxa':<10}")
