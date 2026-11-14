@@ -2430,9 +2430,9 @@ Parâmetros usados nesta execução:
 [PROGRESSO] 15/15 execuções concluídas em 145.1 min.
 
 ==============================================================================
- RESUMO FINAL — TABELAS PARA OS CAPÍTULOS 4 e 5 DO TCC
+ RESUMO FINAL — TABELAS
 ==============================================================================
-Cada cenário foi executado 5 vezes, com a topologia reconstruída do zero a cada repetição. Cada rodada de ataque usou um MAC de atacante distinto, simulando dispositivos diferentes — por isso a taxa de detecção por rodada abaixo já reflete tentativas independentes, sem o efeito de mascaramento pelo bloqueio NAC observado na versão anterior dos testes.
+Cada cenário foi executado 5 vezes, com a topologia reconstruída do zero a cada repetição. Cada rodada de ataque usou um MAC de atacante distinto, simulando dispositivos diferentes — por isso a taxa de detecção por rodada abaixo já reflete tentativas independentes.
 
 Cenário   Execuções   Detecção/rodada     Taxa      
 ------------------------------------------------------------------------------
