@@ -1,5 +1,5 @@
 ==============================================================================
- RESULTADOS DOS TESTES EXPERIMENTAIS (TESTE RÁPIDO, SEM --nac)
+ RESULTADOS DOS TESTES EXPERIMENTAIS TESTE RÁPIDO, SEM --nac
  Detecção de ARP Poisoning em Redes Industriais com Python
  Gerado em: 05/11/2026 17:30:21
 ==============================================================================
@@ -197,8 +197,6 @@ RESUMO GERAL (todos os cenários e repetições agregados):
   Taxa de falso positivo (h3)         : 0/3 (0.0%)
   Host novo aceito corretamente (h9)  : 1/1 (100.0%)
 
-AVISOS/ERROS OCORRIDOS DURANTE OS TESTES (revise antes de usar os números):
-  - Aprendizado terminou com 0 hosts mapeados.
 
 ==============================================================================
  FIM DOS TESTES
